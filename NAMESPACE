@@ -1,0 +1,8 @@
+exportPattern("^[[:alpha:]]+")
+import(jmvcore)
+import(car)
+import(ggplot2)
+import(pracma)
+import(mnormt)
+import(lme4)
+import(grDevices)

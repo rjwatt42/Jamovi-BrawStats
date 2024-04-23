@@ -1,0 +1,12 @@
+Package: BrawStats
+Type: Package
+Title: Some BrawStats functions (Title Case)
+Version: 0.1.1
+Author: Roger Watt
+Maintainer: Roger Watt <r.j.watt@stir.ac.uk>
+Description: This implements some features of BrawStats in Jamovi.
+    For now, focussing on normalized effect sizes.
+License: Creative Commons
+Encoding: UTF-8
+LazyData: true
+Imports: jmvcore (>= 2.3.4), R6, car, ggplot2, mnormt, pracma, lme4, grDevices

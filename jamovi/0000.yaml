@@ -1,0 +1,24 @@
+---
+title: Effect Size Analysis
+name: BrawStats
+version: 1.1.0
+jms: '1.0'
+authors:
+  - Roger Watt
+maintainer: Roger Watt <rjw1@stir.ac.uk>
+date: '2023-21-09'
+type: R
+description: |-
+  BrawStats functions:
+    i.   data simulation
+    ii.  explore decisions
+analyses:
+  - title: 'BrawStats:Simulate Data'
+    name: BrawSim
+    ns: BrawStats
+    menuGroup: BrawStats
+    menuTitle: 'BrawStats:Simulate Data'
+usesNative: true
+minApp: 1.0.8
+
+...
