@@ -62,7 +62,6 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             showSampleBtn = FALSE,
             makeSampleBtn = FALSE,
             numberSamples = 100,
-            appendMultiple = "no",
             makeMultipleBtn = NULL,
             showMultipleBtn = NULL,
             showHypothesis = "Hypothesis",
@@ -75,7 +74,6 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             exploreDoingNull = "no",
             exploreNscale = FALSE,
             numberExplores = 10,
-            appendExplore = "no",
             makeExploreBtn = NULL,
             showExploreBtn = NULL,
             typeExplore = "n",
@@ -360,13 +358,6 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "numberSamples",
                 numberSamples,
                 default=100)
-            private$..appendMultiple <- jmvcore::OptionList$new(
-                "appendMultiple",
-                appendMultiple,
-                options=list(
-                    "yes",
-                    "no"),
-                default="no")
             private$..makeMultipleBtn <- jmvcore::OptionAction$new(
                 "makeMultipleBtn",
                 makeMultipleBtn)
@@ -452,13 +443,6 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "numberExplores",
                 numberExplores,
                 default=10)
-            private$..appendExplore <- jmvcore::OptionList$new(
-                "appendExplore",
-                appendExplore,
-                options=list(
-                    "yes",
-                    "no"),
-                default="no")
             private$..makeExploreBtn <- jmvcore::OptionAction$new(
                 "makeExploreBtn",
                 makeExploreBtn)
@@ -571,7 +555,6 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..showSampleBtn)
             self$.addOption(private$..makeSampleBtn)
             self$.addOption(private$..numberSamples)
-            self$.addOption(private$..appendMultiple)
             self$.addOption(private$..makeMultipleBtn)
             self$.addOption(private$..showMultipleBtn)
             self$.addOption(private$..showHypothesis)
@@ -584,7 +567,6 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..exploreDoingNull)
             self$.addOption(private$..exploreNscale)
             self$.addOption(private$..numberExplores)
-            self$.addOption(private$..appendExplore)
             self$.addOption(private$..makeExploreBtn)
             self$.addOption(private$..showExploreBtn)
             self$.addOption(private$..typeExplore)
@@ -648,7 +630,6 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         showSampleBtn = function() private$..showSampleBtn$value,
         makeSampleBtn = function() private$..makeSampleBtn$value,
         numberSamples = function() private$..numberSamples$value,
-        appendMultiple = function() private$..appendMultiple$value,
         makeMultipleBtn = function() private$..makeMultipleBtn$value,
         showMultipleBtn = function() private$..showMultipleBtn$value,
         showHypothesis = function() private$..showHypothesis$value,
@@ -661,7 +642,6 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         exploreDoingNull = function() private$..exploreDoingNull$value,
         exploreNscale = function() private$..exploreNscale$value,
         numberExplores = function() private$..numberExplores$value,
-        appendExplore = function() private$..appendExplore$value,
         makeExploreBtn = function() private$..makeExploreBtn$value,
         showExploreBtn = function() private$..showExploreBtn$value,
         typeExplore = function() private$..typeExplore$value,
@@ -724,7 +704,6 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..showSampleBtn = NA,
         ..makeSampleBtn = NA,
         ..numberSamples = NA,
-        ..appendMultiple = NA,
         ..makeMultipleBtn = NA,
         ..showMultipleBtn = NA,
         ..showHypothesis = NA,
@@ -737,7 +716,6 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..exploreDoingNull = NA,
         ..exploreNscale = NA,
         ..numberExplores = NA,
-        ..appendExplore = NA,
         ..makeExploreBtn = NA,
         ..showExploreBtn = NA,
         ..typeExplore = NA,
@@ -864,7 +842,6 @@ BrawSimBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param showSampleBtn .
 #' @param makeSampleBtn .
 #' @param numberSamples .
-#' @param appendMultiple .
 #' @param makeMultipleBtn .
 #' @param showMultipleBtn .
 #' @param showHypothesis .
@@ -877,7 +854,6 @@ BrawSimBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param exploreDoingNull .
 #' @param exploreNscale .
 #' @param numberExplores .
-#' @param appendExplore .
 #' @param makeExploreBtn .
 #' @param showExploreBtn .
 #' @param typeExplore .
@@ -948,7 +924,6 @@ BrawSim <- function(
     showSampleBtn = FALSE,
     makeSampleBtn = FALSE,
     numberSamples = 100,
-    appendMultiple = "no",
     makeMultipleBtn,
     showMultipleBtn,
     showHypothesis = "Hypothesis",
@@ -961,7 +936,6 @@ BrawSim <- function(
     exploreDoingNull = "no",
     exploreNscale = FALSE,
     numberExplores = 10,
-    appendExplore = "no",
     makeExploreBtn,
     showExploreBtn,
     typeExplore = "n",
@@ -1029,7 +1003,6 @@ BrawSim <- function(
         showSampleBtn = showSampleBtn,
         makeSampleBtn = makeSampleBtn,
         numberSamples = numberSamples,
-        appendMultiple = appendMultiple,
         makeMultipleBtn = makeMultipleBtn,
         showMultipleBtn = showMultipleBtn,
         showHypothesis = showHypothesis,
@@ -1042,7 +1015,6 @@ BrawSim <- function(
         exploreDoingNull = exploreDoingNull,
         exploreNscale = exploreNscale,
         numberExplores = numberExplores,
-        appendExplore = appendExplore,
         makeExploreBtn = makeExploreBtn,
         showExploreBtn = showExploreBtn,
         typeExplore = typeExplore,

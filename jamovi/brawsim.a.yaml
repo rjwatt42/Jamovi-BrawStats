@@ -372,16 +372,6 @@ options:
       type: Number
       default: 100
 
-    - name: appendMultiple
-      title: 'append'
-      type: List
-      options:
-      - name: 'yes'
-        title: 'yes'
-      - name: 'no'
-        title: 'no'
-      default: 'no'
-
     - name: makeMultipleBtn
       title: 'make'
       type: Action
@@ -511,16 +501,6 @@ options:
       title: 'no of samples'
       type: Number
       default: 10
-
-    - name: appendExplore
-      title: 'append'
-      type: List
-      options:
-      - name: 'yes'
-        title: 'yes'
-      - name: 'no'
-        title: 'no'
-      default: 'no'
 
     - name: makeExploreBtn
       title: 'make'

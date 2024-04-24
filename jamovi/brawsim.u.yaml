@@ -488,8 +488,6 @@ children:
         children:
           - name: makeMultipleBtn
             type: ActionButton
-          - name: appendMultiple
-            type: ComboBox
           - name: showMultipleBtn
             type: ActionButton
           - name: showMultiple
@@ -547,8 +545,6 @@ children:
             type: ActionButton
           - type: ComboBox
             name: typeExplore
-          - name: appendExplore
-            type: ComboBox
           - name: showExploreBtn
             type: ActionButton
           - type: ComboBox

@@ -25,11 +25,9 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                           showExplore="r"
         )
         braw.env$statusStore<-statusStore
-        # self$results$debug$setState(statusStore)
       }
       
       statusStore<-braw.env$statusStore
-      # statusStore<-self$results$debug$state
       # val1<-length(braw.res$expected$result$rIV)
       
       # get some flags for later
@@ -105,8 +103,11 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                          )
       )
       
+      oldH<-braw.def$hypothesis
       hypothesis<-makeHypothesis(IV,IV2,DV,effect)
+      changed<- !identical(oldH,hypothesis)
       
+      oldD<-braw.def$design
       design<-makeDesign(sN=self$options$SampleSize,
                                 sMethod=makeSampling(self$options$SampleMethod),
                                 sIV1Use=self$options$SampleUsage1,
@@ -114,17 +115,24 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                                 sDependence=self$options$Dependence,
                                 sOutliers=self$options$Outliers,
                                 sCheating=self$options$Cheating,sCheatingAttempts=self$options$CheatingAttempts)
+      changed<- changed || !identical(oldD,design)
       
+      oldE<-braw.def$evidence
       evidence<-makeEvidence(Welch=self$options$Welch=="yes",
                                     Transform=self$options$Transform,
                                     shortHand=self$options$shorthand=="yes"
                                     )
+      changed<- changed || !identical(oldE,evidence)
       
       braw.def$hypothesis<<-hypothesis
       braw.def$design<<-design
       braw.def$evidence<<-evidence
       # outputNow<-"Hypothesis"
-      
+      if (changed) {
+        braw.res$result<<-NULL
+        braw.res$expected<<-NULL
+        braw.res$explore<<-NULL
+      }
       madeSample<-"no"
       # did we ask for a new sample?
       if (makeSampleNow) {
@@ -137,9 +145,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       # did we ask for new multiples?
       if (makeMultipleNow) {
         numberSamples<-self$options$numberSamples
-        if (self$options$appendMultiple=="no") expectedResult<-NULL
-        else                 expectedResult<-braw.res$expected
-        expectedResult<-doExpected(nsims=numberSamples,expectedResult=expectedResult,
+        expectedResult<-doExpected(nsims=numberSamples,expectedResult=braw.res$expected,
                                      doingNull=self$options$multipleDoingNull=="yes")
         outputNow<-"Multiple"
       }
@@ -147,9 +153,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       # did we ask for new explore?
       if (makeExploreNow) {
         numberExplores<-self$options$numberExplores
-        if (self$options$appendExplore=="no") exploreResult<-NULL
-        else                exploreResult<-braw.res$explore
-        exploreResult<-doExplore(nsims=numberExplores,exploreResult=exploreResult,exploreType=typeExplore,
+        exploreResult<-doExplore(nsims=numberExplores,exploreResult=braw.res$explore,exploreType=typeExplore,
                                           exploreNPoints=self$options$exploreNPoints,
                                           doingNull=self$options$exploreDoingNull=="yes")
         outputNow<-"Explore"
