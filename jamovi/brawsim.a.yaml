@@ -356,11 +356,11 @@ options:
     - name: showHypothesisBtn
       title: 'show'
       type: Action
-
-    - name: showSampleBtn
-      type: Action
-      title: show
-      default: false
+# 
+#     - name: showSampleBtn
+#       type: Action
+#       title: show
+#       default: false
 
     - name: makeSampleBtn
       type: Action
@@ -375,27 +375,27 @@ options:
     - name: makeMultipleBtn
       title: 'make'
       type: Action
-
-    - name: showMultipleBtn
-      title: 'show'
-      type: Action
+# 
+#     - name: showMultipleBtn
+#       title: 'show'
+#       type: Action
 
     - name: showHypothesis
-      title: 'display:'
+      title: ' show:'
       type: List
       options:
         - name: Hypothesis
           title: Hypothesis
         - name: Design
           title: Design
-        - name: Population
-          title: Population
-        - name: Prediction
-          title: Prediction
+        # - name: Population
+        #   title: Population
+        # - name: Prediction
+        #   title: Prediction
       default: Hypothesis
       
     - name: showSample
-      title: 'display:'
+      title: ' show:'
       type: List
       options:
         - name: Sample
@@ -407,7 +407,7 @@ options:
       default: Sample
       
     - name: showInfer
-      title: ':'
+      title: ' as:'
       type: List
       options:
         - name: Basic
@@ -431,7 +431,7 @@ options:
       default: Basic
       
     - name: showMultiple
-      title: ':'
+      title: ' show as:'
       type: List
       options:
         - name: Basic
@@ -470,7 +470,9 @@ options:
         title: unique
       - name: total
         title: total
-      default: direct
+      - name: all
+        title: all
+      default: all
 
     - name: exploreNPoints
       title: exploreNPoints
@@ -503,15 +505,15 @@ options:
       default: 10
 
     - name: makeExploreBtn
-      title: 'make'
+      title: 'explore'
       type: Action
-
-    - name: showExploreBtn
-      title: 'show'
-      type: Action
+# 
+#     - name: showExploreBtn
+#       title: 'show'
+#       type: Action
 
     - name: typeExplore
-      title: ':'
+      title: '='
       type: List
       options:
         - name: rIV
@@ -557,7 +559,7 @@ options:
       default: n
       
     - name: showExplore
-      title: ':'
+      title: ' show as:'
       type: List
       options:
         - name: r
@@ -594,5 +596,7 @@ options:
         title: unique
       - name: total
         title: total
-      default: unique
+      - name: all
+        title: all
+      default: all
 ...

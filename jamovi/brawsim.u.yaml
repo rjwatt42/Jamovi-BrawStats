@@ -462,8 +462,8 @@ children:
         children:
           - type: ActionButton
             name: makeSampleBtn
-          - type: ActionButton
-            name: showSampleBtn
+          # - type: ActionButton
+          #   name: showSampleBtn
           - type: ComboBox
             name: showSample
           - type: ComboBox
@@ -488,8 +488,8 @@ children:
         children:
           - name: makeMultipleBtn
             type: ActionButton
-          - name: showMultipleBtn
-            type: ActionButton
+          # - name: showMultipleBtn
+          #   type: ActionButton
           - name: showMultiple
             type: ComboBox
           - name: whichShowMultiple
@@ -545,8 +545,8 @@ children:
             type: ActionButton
           - type: ComboBox
             name: typeExplore
-          - name: showExploreBtn
-            type: ActionButton
+          # - name: showExploreBtn
+          #   type: ActionButton
           - type: ComboBox
             name: showExplore
           - name: whichShowExplore
