@@ -63,8 +63,9 @@ getNulls<-function(analysis,useSig=FALSE,useNSig=FALSE) {
 showInference<-function(analysis=braw.res$result,showType="Basic",dimension="1D",orientation="vert",
                         effectType="direct",showTheory=braw.env$showTheory
 ) {
-    if (is.null(analysis)) analysis<-doResult(autoShow=FALSE)
-    if (showType[1]=="2D") {
+  if (is.null(analysis)) analysis<-doResult(autoShow=FALSE)
+  
+  if (showType[1]=="2D") {
     showType<-"Basic"
     dimension<-"2D"
   }
@@ -103,7 +104,9 @@ showInference<-function(analysis=braw.res$result,showType="Basic",dimension="1D"
              other1<-analysis2
              other2<-analysis1
            },
-           {showType<-c(showType,NA)}
+           { showType<-strsplit(showType,";")[[1]]
+             if (length(showType)==1) showType<-c(showType,NA)
+             }
     )
   } 
   

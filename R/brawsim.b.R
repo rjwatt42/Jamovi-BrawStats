@@ -32,20 +32,20 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       showInferParam<-self$options$showInferParam
       if (showInferParam=="2D") {
         dimensionInfer<-"2D"
-        showInferParam<-"Basic"
+        showInferParam<-paste0(self$options$singleVar1,";",self$options$singleVar2)
       } else dimensionInfer<-"1D"
       
       makeMultipleNow<-self$options$makeMultipleBtn
-      showMultipleOut<-self$options$showMultipleParam
-      if (showMultipleOut=="2D") {
+      showMultipleParam<-self$options$showMultipleParam
+      if (showMultipleParam=="2D") {
         dimensionMultiple<-"2D"
-        showMultipleOut<-"Basic"
+        showMultipleParam<-paste0(self$options$multipleVar1,";",self$options$multipleVar2)
       } else dimensionMultiple<-"1D"
       whichShowMultipleOut<-self$options$whichShowMultiple
 
       makeExploreNow<-self$options$makeExploreBtn
       typeExplore<-self$options$typeExplore
-      showExploreOut<-self$options$showExploreParam
+      showExploreParam<-self$options$showExploreParam
       whichShowExploreOut<-self$options$whichShowExplore
       
       outputNow<-statusStore$lastOutput
@@ -174,12 +174,12 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                  self$results$reportPlot$setState(c(outputNow,showInferParam))
                },
                "Multiple"={
-                 self$results$graphPlot$setState(c(outputNow,showMultipleOut,dimensionMultiple,whichShowMultipleOut))
-                 self$results$reportPlot$setState(c(outputNow,showMultipleOut))
+                 self$results$graphPlot$setState(c(outputNow,showMultipleParam,dimensionMultiple,whichShowMultipleOut))
+                 self$results$reportPlot$setState(c(outputNow,showMultipleParam))
                },
                "Explore"={
-                 self$results$graphPlot$setState(c(outputNow,showExploreOut,whichShowExploreOut))
-                 self$results$reportPlot$setState(c(outputNow,showExploreOut))
+                 self$results$graphPlot$setState(c(outputNow,showExploreParam,whichShowExploreOut))
+                 self$results$reportPlot$setState(c(outputNow,showExploreParam))
                },
                {
                  self$results$graphPlot$setState(outputNow)

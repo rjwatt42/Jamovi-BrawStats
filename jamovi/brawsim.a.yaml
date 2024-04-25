@@ -386,6 +386,78 @@ options:
       title: 'make'
       type: Action
 
+    - name: singleVar1
+      title: ' var1:'
+      type: List
+      options:
+        - name: r
+          title: r
+        - name: p
+          title: p
+        - name: w
+          title: w
+        - name: n
+          title: n
+        - name: rp
+          title: rp
+        - name: wp
+          title: wp
+      default: r
+
+    - name: singleVar2
+      title: ' var2:'
+      type: List
+      options:
+        - name: r
+          title: r
+        - name: p
+          title: p
+        - name: w
+          title: w
+        - name: n
+          title: n
+        - name: rp
+          title: rp
+        - name: wp
+          title: wp
+      default: p
+
+    - name: multipleVar1
+      title: ' var1:'
+      type: List
+      options:
+        - name: r
+          title: r
+        - name: p
+          title: p
+        - name: w
+          title: w
+        - name: n
+          title: n
+        - name: rp
+          title: rp
+        - name: wp
+          title: wp
+      default: r
+
+    - name: multipleVar2
+      title: ' var2:'
+      type: List
+      options:
+        - name: r
+          title: r
+        - name: p
+          title: p
+        - name: w
+          title: w
+        - name: n
+          title: n
+        - name: rp
+          title: rp
+        - name: wp
+          title: wp
+      default: p
+
     - name: showSampleType
       title: ' show:'
       type: List
@@ -418,8 +490,8 @@ options:
           title: rp
         - name: wp
           title: wp
-        - name: nw
-          title: nw
+        - name: wn
+          title: wn
       default: Basic
       
     - name: showMultipleParam
@@ -442,8 +514,8 @@ options:
           title: rp
         - name: wp
           title: wp
-        - name: nw
-          title: nw
+        - name: wn
+          title: wn
         - name: NHST
           title: NHST
         - name: FDR

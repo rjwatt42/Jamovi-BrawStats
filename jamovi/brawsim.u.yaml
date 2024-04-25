@@ -467,6 +467,10 @@ children:
                 label: ' '
                 margin: small
                 minWidth: 13
+              - type: ComboBox
+                name: singleVar1
+              - type: ComboBox
+                name: singleVar2
       - type: LayoutBox
         style: inline
         margin: none
@@ -477,6 +481,7 @@ children:
             name: showSampleType
           - type: ComboBox
             name: showInferParam
+            enable: (showSampleType:Infer)
       - type: CollapseBox
         label: Multiple Samples
         collapsed: true
@@ -491,6 +496,17 @@ children:
                 format: number
               - name: multipleDoingNull
                 type: ComboBox
+          - type: LayoutBox
+            style: inline
+            children:
+              - type: Label
+                label: ' '
+                margin: small
+                minWidth: 13
+              - type: ComboBox
+                name: multipleVar1
+              - type: ComboBox
+                name: multipleVar2
       - type: LayoutBox
         style: inline
         margin: none
@@ -501,6 +517,7 @@ children:
             type: ComboBox
           - name: whichShowMultiple
             type: ComboBox
+            enable: (IV2on)
   - type: Label
     label: Explore
     children:
@@ -556,3 +573,4 @@ children:
             name: showExploreParam
           - name: whichShowExplore
             type: ComboBox
+            enable: (IV2on)
