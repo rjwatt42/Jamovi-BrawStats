@@ -15,12 +15,11 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       # initialization code
       if (!exists("braw.env")) {
         BrawOpts(fontScale = 1.35)
-        statusStore<-list(lastOutput="Hypothesis",
-                          showHypothesis="Hypothesis",
-                          showSample="Sample",
-                          showInfer="Basic",
-                          showMultiple="Basic",
-                          showExplore="r"
+        statusStore<-list(lastOutput="System",
+                          showSampleType="Sample",
+                          showInferParam="Basic",
+                          showMultipleParam="Basic",
+                          showExploreParam="r"
         )
         braw.env$statusStore<-statusStore
       }
@@ -28,18 +27,16 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       statusStore<-braw.env$statusStore
       
       # get some flags for later
-      showHypothesisType<-self$options$showHypothesis
-      
       makeSampleNow<-self$options$makeSampleBtn
-      showSampleType<-self$options$showSample
-      showInfer<-self$options$showInfer
-      if (showInfer=="2D") {
+      showSampleType<-self$options$showSampleType
+      showInferParam<-self$options$showInferParam
+      if (showInferParam=="2D") {
         dimensionInfer<-"2D"
-        showInfer<-"Basic"
+        showInferParam<-"Basic"
       } else dimensionInfer<-"1D"
       
       makeMultipleNow<-self$options$makeMultipleBtn
-      showMultipleOut<-self$options$showMultiple
+      showMultipleOut<-self$options$showMultipleParam
       if (showMultipleOut=="2D") {
         dimensionMultiple<-"2D"
         showMultipleOut<-"Basic"
@@ -48,25 +45,17 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
       makeExploreNow<-self$options$makeExploreBtn
       typeExplore<-self$options$typeExplore
-      showExploreOut<-self$options$showExplore
+      showExploreOut<-self$options$showExploreParam
       whichShowExploreOut<-self$options$whichShowExplore
       
       outputNow<-statusStore$lastOutput
-      if (self$options$showHypothesisBtn) outputNow<-"Hypothesis"
-      # if (self$options$showSampleBtn) outputNow<-"Sample"
-      # if (self$options$showMultipleBtn) outputNow<-"Multiple"
-      # if (self$options$showExploreBtn) outputNow<-"Explore"
+      if (self$options$showHypothesisBtn) outputNow<-"System"
 
-      if (self$options$showExplore != statusStore$showExplore) outputNow<-"Explore"
-      if (self$options$showMultiple != statusStore$showMultiple) outputNow<-"Multiple"
-      if (self$options$showInfer != statusStore$showInfer) outputNow<-"Sample"
-      if (self$options$showSample != statusStore$showSample) outputNow<-"Sample"
-      if (self$options$showHypothesis != statusStore$showHypothesis) outputNow<-"Hypothesis"
+      if (self$options$showExploreParam != statusStore$showExploreParam) outputNow<-"Explore"
+      if (self$options$showMultipleParam != statusStore$showMultipleParam) outputNow<-"Multiple"
+      if (self$options$showInferParam != statusStore$showInferParam) outputNow<-"Infer"
+      if (self$options$showSampleType != statusStore$showSampleType) outputNow<-showSampleType
 
-      # if (self$options$showSampleBtn) makeSampleNow<-TRUE
-      # if (self$options$showMultipleBtn) makeMultipleNow<-TRUE
-      # if (self$options$showExploreBtn) makeExploreNow<-TRUE
-      
       # make all the standard things we need
       locals<-list(hypothesis=NULL,design=NULL,evidence=NULL,
                    sample=NULL,analysis=NULL,explore=NULL)
@@ -102,8 +91,8 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       
       oldH<-braw.def$hypothesis
       hypothesis<-makeHypothesis(IV,IV2,DV,effect)
-      changed<- !identical(oldH,hypothesis)
-      
+      changedH<- !identical(oldH,hypothesis)
+
       oldD<-braw.def$design
       design<-makeDesign(sN=self$options$SampleSize,
                                 sMethod=makeSampling(self$options$SampleMethod),
@@ -111,31 +100,33 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                                 sIV2Use=self$options$SampleUsage2,
                                 sDependence=self$options$Dependence,
                                 sOutliers=self$options$Outliers,
-                                sCheating=self$options$Cheating,sCheatingAttempts=self$options$CheatingAttempts)
-      changed<- changed || !identical(oldD,design)
+                                sCheating=self$options$Cheating,sCheatingAttempts=self$options$CheatingAttempts,
+                                sNRand=self$options$SampleSpread=="yes",sNRandK=self$options$SampleGamma
+                         )
+      changedD<- !identical(oldD,design)
       
       oldE<-braw.def$evidence
       evidence<-makeEvidence(Welch=self$options$Welch=="yes",
                                     Transform=self$options$Transform,
                                     shortHand=self$options$shorthand=="yes"
                                     )
-      changed<- changed || !identical(oldE,evidence)
+      changedE<- !identical(oldE,evidence)
       
       braw.def$hypothesis<<-hypothesis
       braw.def$design<<-design
       braw.def$evidence<<-evidence
-      if (changed) {
+      if (changedH || changedD || changedE) {
         braw.res$result<<-NULL
         braw.res$expected<<-NULL
         braw.res$explore<<-NULL
-        outputNow<-"Hypothesis"
+        outputNow<-"System"
       }
 
       # did we ask for a new sample?
       if (makeSampleNow) {
         # make a sample
         result<-doResult()
-        outputNow<-"Sample"
+        outputNow<-showSampleType
       }
       
       # did we ask for new multiples?
@@ -156,39 +147,43 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       }
       
       # what are we showing?
-      # outputText<-NULL
-      outputGraph<-NULL
-      if (!is.null(outputNow)) {
-        switch(outputNow,
-               "Hypothesis"=outputGraph<-showHypothesisType,
-               "Sample"=outputGraph<-showSampleType,
-               "Multiple"=outputGraph<-"Multiple",
-               "Explore"=outputGraph<-"Explore"
-        )
-        outputNow<-"Hypothesis"
-      }
       statusStore$lastOutput<-outputNow
       
       
       # end of actions      
-      statusStore$showHypothesis<-self$options$showHypothesis
-      statusStore$showSample<-self$options$showSample
-      statusStore$showInfer<-self$options$showInfer
-      statusStore$showMultiple<-self$options$showMultiple
-      statusStore$showExplore<-self$options$showExplore
+      statusStore$showSampleType<-self$options$showSampleType
+      statusStore$showInferParam<-self$options$showInferParam
+      statusStore$showMultipleParam<-self$options$showMultipleParam
+      statusStore$showExploreParam<-self$options$showExploreParam
       # save everything for the next round      
       braw.env$statusStore<-statusStore
       
       # main results graphs/reports
-      # if (!is.null(outputText))      self$results$reportPlot$setState(outputText)
-      if (!is.null(outputGraph))     
-        switch(outputGraph,
-               "Infer"=self$results$graphPlot$setState(c(outputGraph,showInfer,dimensionInfer)),
-               "Multiple"=self$results$graphPlot$setState(c(outputGraph,showMultipleOut,dimensionMultiple,whichShowMultipleOut)),
-               "Explore"=self$results$graphPlot$setState(c(outputGraph,showExploreOut,whichShowExploreOut)),
+      if (!is.null(outputNow))     
+        switch(outputNow,
+               "Sample"={
+                 self$results$graphPlot$setState(outputNow)
+                 self$results$reportPlot$setState(outputNow)
+               },
+               "Describe"={
+                 self$results$graphPlot$setState(outputNow)
+                 self$results$reportPlot$setState(outputNow)
+               },
+               "Infer"={
+                 self$results$graphPlot$setState(c(outputNow,showInferParam,dimensionInfer))
+                 self$results$reportPlot$setState(c(outputNow,showInferParam))
+               },
+               "Multiple"={
+                 self$results$graphPlot$setState(c(outputNow,showMultipleOut,dimensionMultiple,whichShowMultipleOut))
+                 self$results$reportPlot$setState(c(outputNow,showMultipleOut))
+               },
+               "Explore"={
+                 self$results$graphPlot$setState(c(outputNow,showExploreOut,whichShowExploreOut))
+                 self$results$reportPlot$setState(c(outputNow,showExploreOut))
+               },
                {
-                 self$results$graphPlot$setState(outputGraph)
-                 }
+                 self$results$graphPlot$setState(outputNow)
+               }
         )
     },
     
@@ -196,6 +191,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       outputGraph <- image$state[1]
       if (!is.null(outputGraph)) {
         switch(outputGraph,
+               "System"    =outputGraph<-showSystem(),
                "Hypothesis"=outputGraph<-showHypothesis(),
                "Design"    =outputGraph<-showDesign(),
                "Population"=outputGraph<-showPopulation(),
@@ -205,6 +201,23 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                "Infer"     =outputGraph<-showInference(showType=image$state[2],dimension=image$state[3]),
                "Multiple"  =outputGraph<-showExpected(showType=image$state[2],dimension=image$state[3],effectType=image$state[4]),
                "Explore"   =outputGraph<-showExplore(showType=image$state[2],effectType=image$state[3])
+        )
+        print(outputGraph)
+        return(TRUE)
+      } else {
+        return(FALSE)
+      }
+    },
+    
+    .plotReport=function(image, ...) {
+      outputGraph <- image$state[1]
+      if (!is.null(outputGraph)) {
+        switch(outputGraph,
+               "Sample"    =outputGraph<-reportSample(),
+               "Describe"  =outputGraph<-reportDescription(),
+               "Infer"     =outputGraph<-reportInference(),
+               "Multiple"  =outputGraph<-reportExpected(showType=image$state[2]),
+               "Explore"   =outputGraph<-reportExplore(showType=image$state[2])
         )
         print(outputGraph)
         return(TRUE)

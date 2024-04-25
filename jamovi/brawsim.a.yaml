@@ -246,6 +246,21 @@ options:
       type: Number
       default: 42
     
+    - name: SampleSpread
+      title: variable? 
+      type: List
+      options:
+      - name: 'no'
+        title: 'no'
+      - name: 'yes'
+        title: 'yes'
+      default: no
+    
+    - name: SampleGamma
+      title: " " 
+      type: Number
+      default: 1.56
+      
     - name: SampleMethod
       title: 'Method'
       type: List
@@ -356,11 +371,6 @@ options:
     - name: showHypothesisBtn
       title: 'show'
       type: Action
-# 
-#     - name: showSampleBtn
-#       type: Action
-#       title: show
-#       default: false
 
     - name: makeSampleBtn
       type: Action
@@ -375,26 +385,8 @@ options:
     - name: makeMultipleBtn
       title: 'make'
       type: Action
-# 
-#     - name: showMultipleBtn
-#       title: 'show'
-#       type: Action
 
-    - name: showHypothesis
-      title: ' show:'
-      type: List
-      options:
-        - name: Hypothesis
-          title: Hypothesis
-        - name: Design
-          title: Design
-        # - name: Population
-        #   title: Population
-        # - name: Prediction
-        #   title: Prediction
-      default: Hypothesis
-      
-    - name: showSample
+    - name: showSampleType
       title: ' show:'
       type: List
       options:
@@ -406,7 +398,7 @@ options:
           title: Infer
       default: Sample
       
-    - name: showInfer
+    - name: showInferParam
       title: ' as:'
       type: List
       options:
@@ -430,7 +422,7 @@ options:
           title: nw
       default: Basic
       
-    - name: showMultiple
+    - name: showMultipleParam
       title: ' show as:'
       type: List
       options:
@@ -507,10 +499,6 @@ options:
     - name: makeExploreBtn
       title: 'explore'
       type: Action
-# 
-#     - name: showExploreBtn
-#       title: 'show'
-#       type: Action
 
     - name: typeExplore
       title: '='
@@ -558,7 +546,7 @@ options:
           title: Hscedast
       default: n
       
-    - name: showExplore
+    - name: showExploreParam
       title: ' show as:'
       type: List
       options:

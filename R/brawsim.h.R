@@ -47,6 +47,8 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             Worldk = 0.3,
             WorldNullP = 0.5,
             SampleSize = 42,
+            SampleSpread = "no",
+            SampleGamma = 1.56,
             SampleMethod = "Random",
             SampleUsage1 = "Between",
             SampleUsage2 = "Between",
@@ -62,10 +64,9 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             makeSampleBtn = FALSE,
             numberSamples = 100,
             makeMultipleBtn = NULL,
-            showHypothesis = "Hypothesis",
-            showSample = "Sample",
-            showInfer = "Basic",
-            showMultiple = "Basic",
+            showSampleType = "Sample",
+            showInferParam = "Basic",
+            showMultipleParam = "Basic",
             whichShowMultiple = "all",
             exploreNPoints = 13,
             exploreMaxN = 250,
@@ -74,7 +75,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             numberExplores = 10,
             makeExploreBtn = NULL,
             typeExplore = "n",
-            showExplore = "r",
+            showExploreParam = "r",
             whichShowExplore = "all", ...) {
 
             super$initialize(
@@ -266,6 +267,17 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "SampleSize",
                 SampleSize,
                 default=42)
+            private$..SampleSpread <- jmvcore::OptionList$new(
+                "SampleSpread",
+                SampleSpread,
+                options=list(
+                    "no",
+                    "yes"),
+                default="no")
+            private$..SampleGamma <- jmvcore::OptionNumber$new(
+                "SampleGamma",
+                SampleGamma,
+                default=1.56)
             private$..SampleMethod <- jmvcore::OptionList$new(
                 "SampleMethod",
                 SampleMethod,
@@ -354,24 +366,17 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..makeMultipleBtn <- jmvcore::OptionAction$new(
                 "makeMultipleBtn",
                 makeMultipleBtn)
-            private$..showHypothesis <- jmvcore::OptionList$new(
-                "showHypothesis",
-                showHypothesis,
-                options=list(
-                    "Hypothesis",
-                    "Design"),
-                default="Hypothesis")
-            private$..showSample <- jmvcore::OptionList$new(
-                "showSample",
-                showSample,
+            private$..showSampleType <- jmvcore::OptionList$new(
+                "showSampleType",
+                showSampleType,
                 options=list(
                     "Sample",
                     "Describe",
                     "Infer"),
                 default="Sample")
-            private$..showInfer <- jmvcore::OptionList$new(
-                "showInfer",
-                showInfer,
+            private$..showInferParam <- jmvcore::OptionList$new(
+                "showInferParam",
+                showInferParam,
                 options=list(
                     "Basic",
                     "2D",
@@ -383,9 +388,9 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "wp",
                     "nw"),
                 default="Basic")
-            private$..showMultiple <- jmvcore::OptionList$new(
-                "showMultiple",
-                showMultiple,
+            private$..showMultipleParam <- jmvcore::OptionList$new(
+                "showMultipleParam",
+                showMultipleParam,
                 options=list(
                     "Basic",
                     "2D",
@@ -460,9 +465,9 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "DVprops",
                     "Heteroscedasticity"),
                 default="n")
-            private$..showExplore <- jmvcore::OptionList$new(
-                "showExplore",
-                showExplore,
+            private$..showExploreParam <- jmvcore::OptionList$new(
+                "showExploreParam",
+                showExploreParam,
                 options=list(
                     "r",
                     "p",
@@ -527,6 +532,8 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..Worldk)
             self$.addOption(private$..WorldNullP)
             self$.addOption(private$..SampleSize)
+            self$.addOption(private$..SampleSpread)
+            self$.addOption(private$..SampleGamma)
             self$.addOption(private$..SampleMethod)
             self$.addOption(private$..SampleUsage1)
             self$.addOption(private$..SampleUsage2)
@@ -542,10 +549,9 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..makeSampleBtn)
             self$.addOption(private$..numberSamples)
             self$.addOption(private$..makeMultipleBtn)
-            self$.addOption(private$..showHypothesis)
-            self$.addOption(private$..showSample)
-            self$.addOption(private$..showInfer)
-            self$.addOption(private$..showMultiple)
+            self$.addOption(private$..showSampleType)
+            self$.addOption(private$..showInferParam)
+            self$.addOption(private$..showMultipleParam)
             self$.addOption(private$..whichShowMultiple)
             self$.addOption(private$..exploreNPoints)
             self$.addOption(private$..exploreMaxN)
@@ -554,7 +560,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..numberExplores)
             self$.addOption(private$..makeExploreBtn)
             self$.addOption(private$..typeExplore)
-            self$.addOption(private$..showExplore)
+            self$.addOption(private$..showExploreParam)
             self$.addOption(private$..whichShowExplore)
         }),
     active = list(
@@ -599,6 +605,8 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         Worldk = function() private$..Worldk$value,
         WorldNullP = function() private$..WorldNullP$value,
         SampleSize = function() private$..SampleSize$value,
+        SampleSpread = function() private$..SampleSpread$value,
+        SampleGamma = function() private$..SampleGamma$value,
         SampleMethod = function() private$..SampleMethod$value,
         SampleUsage1 = function() private$..SampleUsage1$value,
         SampleUsage2 = function() private$..SampleUsage2$value,
@@ -614,10 +622,9 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         makeSampleBtn = function() private$..makeSampleBtn$value,
         numberSamples = function() private$..numberSamples$value,
         makeMultipleBtn = function() private$..makeMultipleBtn$value,
-        showHypothesis = function() private$..showHypothesis$value,
-        showSample = function() private$..showSample$value,
-        showInfer = function() private$..showInfer$value,
-        showMultiple = function() private$..showMultiple$value,
+        showSampleType = function() private$..showSampleType$value,
+        showInferParam = function() private$..showInferParam$value,
+        showMultipleParam = function() private$..showMultipleParam$value,
         whichShowMultiple = function() private$..whichShowMultiple$value,
         exploreNPoints = function() private$..exploreNPoints$value,
         exploreMaxN = function() private$..exploreMaxN$value,
@@ -626,7 +633,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         numberExplores = function() private$..numberExplores$value,
         makeExploreBtn = function() private$..makeExploreBtn$value,
         typeExplore = function() private$..typeExplore$value,
-        showExplore = function() private$..showExplore$value,
+        showExploreParam = function() private$..showExploreParam$value,
         whichShowExplore = function() private$..whichShowExplore$value),
     private = list(
         ..DVname = NA,
@@ -670,6 +677,8 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..Worldk = NA,
         ..WorldNullP = NA,
         ..SampleSize = NA,
+        ..SampleSpread = NA,
+        ..SampleGamma = NA,
         ..SampleMethod = NA,
         ..SampleUsage1 = NA,
         ..SampleUsage2 = NA,
@@ -685,10 +694,9 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..makeSampleBtn = NA,
         ..numberSamples = NA,
         ..makeMultipleBtn = NA,
-        ..showHypothesis = NA,
-        ..showSample = NA,
-        ..showInfer = NA,
-        ..showMultiple = NA,
+        ..showSampleType = NA,
+        ..showInferParam = NA,
+        ..showMultipleParam = NA,
         ..whichShowMultiple = NA,
         ..exploreNPoints = NA,
         ..exploreMaxN = NA,
@@ -697,7 +705,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..numberExplores = NA,
         ..makeExploreBtn = NA,
         ..typeExplore = NA,
-        ..showExplore = NA,
+        ..showExploreParam = NA,
         ..whichShowExplore = NA)
 )
 
@@ -805,6 +813,8 @@ BrawSimBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param Worldk .
 #' @param WorldNullP .
 #' @param SampleSize .
+#' @param SampleSpread .
+#' @param SampleGamma .
 #' @param SampleMethod .
 #' @param SampleUsage1 .
 #' @param SampleUsage2 .
@@ -820,10 +830,9 @@ BrawSimBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param makeSampleBtn .
 #' @param numberSamples .
 #' @param makeMultipleBtn .
-#' @param showHypothesis .
-#' @param showSample .
-#' @param showInfer .
-#' @param showMultiple .
+#' @param showSampleType .
+#' @param showInferParam .
+#' @param showMultipleParam .
 #' @param whichShowMultiple .
 #' @param exploreNPoints .
 #' @param exploreMaxN .
@@ -832,7 +841,7 @@ BrawSimBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param numberExplores .
 #' @param makeExploreBtn .
 #' @param typeExplore .
-#' @param showExplore .
+#' @param showExploreParam .
 #' @param whichShowExplore .
 #' @return A results object containing:
 #' \tabular{llllll}{
@@ -884,6 +893,8 @@ BrawSim <- function(
     Worldk = 0.3,
     WorldNullP = 0.5,
     SampleSize = 42,
+    SampleSpread = "no",
+    SampleGamma = 1.56,
     SampleMethod = "Random",
     SampleUsage1 = "Between",
     SampleUsage2 = "Between",
@@ -899,10 +910,9 @@ BrawSim <- function(
     makeSampleBtn = FALSE,
     numberSamples = 100,
     makeMultipleBtn,
-    showHypothesis = "Hypothesis",
-    showSample = "Sample",
-    showInfer = "Basic",
-    showMultiple = "Basic",
+    showSampleType = "Sample",
+    showInferParam = "Basic",
+    showMultipleParam = "Basic",
     whichShowMultiple = "all",
     exploreNPoints = 13,
     exploreMaxN = 250,
@@ -911,7 +921,7 @@ BrawSim <- function(
     numberExplores = 10,
     makeExploreBtn,
     typeExplore = "n",
-    showExplore = "r",
+    showExploreParam = "r",
     whichShowExplore = "all") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
@@ -960,6 +970,8 @@ BrawSim <- function(
         Worldk = Worldk,
         WorldNullP = WorldNullP,
         SampleSize = SampleSize,
+        SampleSpread = SampleSpread,
+        SampleGamma = SampleGamma,
         SampleMethod = SampleMethod,
         SampleUsage1 = SampleUsage1,
         SampleUsage2 = SampleUsage2,
@@ -975,10 +987,9 @@ BrawSim <- function(
         makeSampleBtn = makeSampleBtn,
         numberSamples = numberSamples,
         makeMultipleBtn = makeMultipleBtn,
-        showHypothesis = showHypothesis,
-        showSample = showSample,
-        showInfer = showInfer,
-        showMultiple = showMultiple,
+        showSampleType = showSampleType,
+        showInferParam = showInferParam,
+        showMultipleParam = showMultipleParam,
         whichShowMultiple = whichShowMultiple,
         exploreNPoints = exploreNPoints,
         exploreMaxN = exploreMaxN,
@@ -987,7 +998,7 @@ BrawSim <- function(
         numberExplores = numberExplores,
         makeExploreBtn = makeExploreBtn,
         typeExplore = typeExplore,
-        showExplore = showExplore,
+        showExploreParam = showExploreParam,
         whichShowExplore = whichShowExplore)
 
     analysis <- BrawSimClass$new(
