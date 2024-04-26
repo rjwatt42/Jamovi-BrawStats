@@ -95,22 +95,27 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
       oldD<-braw.def$design
       design<-makeDesign(sN=self$options$SampleSize,
-                                sMethod=makeSampling(self$options$SampleMethod),
+                         sNRand=self$options$SampleSpread=="yes",sNRandK=self$options$SampleGamma,
+                         sMethod=makeSampling(self$options$SampleMethod),
                                 sIV1Use=self$options$SampleUsage1,
                                 sIV2Use=self$options$SampleUsage2,
                                 sDependence=self$options$Dependence,
                                 sOutliers=self$options$Outliers,
                                 sCheating=self$options$Cheating,sCheatingAttempts=self$options$CheatingAttempts,
-                                sNRand=self$options$SampleSpread=="yes",sNRandK=self$options$SampleGamma
+                         Replication=makeReplication(On=self$options$ReplicationOn,
+                                                     Power=self$options$ReplicationPower,
+                                                     Repeats=self$options$ReplicationAttempts,
+                                                     Keep=self$options$ReplicationDecision
+                                                     )
                          )
       changedD<- !identical(oldD,design)
       
       oldE<-braw.def$evidence
       evidence<-makeEvidence(Welch=self$options$Welch=="yes",
-                                    Transform=self$options$Transform,
-                                    shortHand=self$options$shorthand=="yes"
+                                    Transform=self$options$Transform
                                     )
       changedE<- !identical(oldE,evidence)
+      braw.env$alphaSig<<-self$options$alphaSig
       
       braw.def$hypothesis<<-hypothesis
       braw.def$design<<-design
@@ -140,7 +145,8 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       # did we ask for new explore?
       if (makeExploreNow) {
         numberExplores<-self$options$numberExplores
-        exploreResult<-doExplore(nsims=numberExplores,exploreResult=braw.res$explore,exploreType=typeExplore,
+        exploreResult<-doExplore(nsims=numberExplores,exploreResult=braw.res$explore,
+                                 exploreType=typeExplore,
                                           exploreNPoints=self$options$exploreNPoints,
                                           doingNull=self$options$exploreDoingNull=="yes")
         outputNow<-"Explore"

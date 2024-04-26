@@ -26,7 +26,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             IViqr = 4,
             IVncats = 2,
             IVprops = "1,1",
-            IV2on = NULL,
+            IV2on = FALSE,
             IV2name = "IV2",
             IV2type = "Interval",
             IV2mu = 0,
@@ -56,7 +56,11 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             Outliers = 0,
             Cheating = "None",
             CheatingAttempts = 5,
-            shorthand = "no",
+            ReplicationOn = FALSE,
+            ReplicationPower = 0.8,
+            ReplicationAttempts = 1,
+            ReplicationDecision = "cautious",
+            alphaSig = 0.05,
             Welch = "no",
             Transform = "None",
             multipleDoingNull = "no",
@@ -178,7 +182,8 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 default="1,1")
             private$..IV2on <- jmvcore::OptionBool$new(
                 "IV2on",
-                IV2on)
+                IV2on,
+                default=FALSE)
             private$..IV2name <- jmvcore::OptionString$new(
                 "IV2name",
                 IV2name,
@@ -327,13 +332,32 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "CheatingAttempts",
                 CheatingAttempts,
                 default=5)
-            private$..shorthand <- jmvcore::OptionList$new(
-                "shorthand",
-                shorthand,
+            private$..ReplicationOn <- jmvcore::OptionBool$new(
+                "ReplicationOn",
+                ReplicationOn,
+                default=FALSE)
+            private$..ReplicationPower <- jmvcore::OptionNumber$new(
+                "ReplicationPower",
+                ReplicationPower,
+                default=0.8)
+            private$..ReplicationAttempts <- jmvcore::OptionNumber$new(
+                "ReplicationAttempts",
+                ReplicationAttempts,
+                default=1)
+            private$..ReplicationDecision <- jmvcore::OptionList$new(
+                "ReplicationDecision",
+                ReplicationDecision,
                 options=list(
-                    "no",
-                    "yes"),
-                default="no")
+                    "cautious",
+                    "last",
+                    "median",
+                    "smallP",
+                    "largeN"),
+                default="cautious")
+            private$..alphaSig <- jmvcore::OptionNumber$new(
+                "alphaSig",
+                alphaSig,
+                default=0.05)
             private$..Welch <- jmvcore::OptionList$new(
                 "Welch",
                 Welch,
@@ -493,7 +517,6 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 typeExplore,
                 options=list(
                     "rIV",
-                    "rIVIV2",
                     "n",
                     "Method",
                     "Usage",
@@ -501,8 +524,12 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "Outliers",
                     "Cheating",
                     "CheatingAmount",
+                    "Power",
+                    "Keep",
+                    "Repeats",
                     "Alpha",
                     "Transform",
+                    "rIVIV2",
                     "IVType",
                     "DVType",
                     "IVskew",
@@ -589,7 +616,11 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..Outliers)
             self$.addOption(private$..Cheating)
             self$.addOption(private$..CheatingAttempts)
-            self$.addOption(private$..shorthand)
+            self$.addOption(private$..ReplicationOn)
+            self$.addOption(private$..ReplicationPower)
+            self$.addOption(private$..ReplicationAttempts)
+            self$.addOption(private$..ReplicationDecision)
+            self$.addOption(private$..alphaSig)
             self$.addOption(private$..Welch)
             self$.addOption(private$..Transform)
             self$.addOption(private$..multipleDoingNull)
@@ -666,7 +697,11 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         Outliers = function() private$..Outliers$value,
         Cheating = function() private$..Cheating$value,
         CheatingAttempts = function() private$..CheatingAttempts$value,
-        shorthand = function() private$..shorthand$value,
+        ReplicationOn = function() private$..ReplicationOn$value,
+        ReplicationPower = function() private$..ReplicationPower$value,
+        ReplicationAttempts = function() private$..ReplicationAttempts$value,
+        ReplicationDecision = function() private$..ReplicationDecision$value,
+        alphaSig = function() private$..alphaSig$value,
         Welch = function() private$..Welch$value,
         Transform = function() private$..Transform$value,
         multipleDoingNull = function() private$..multipleDoingNull$value,
@@ -742,7 +777,11 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..Outliers = NA,
         ..Cheating = NA,
         ..CheatingAttempts = NA,
-        ..shorthand = NA,
+        ..ReplicationOn = NA,
+        ..ReplicationPower = NA,
+        ..ReplicationAttempts = NA,
+        ..ReplicationDecision = NA,
+        ..alphaSig = NA,
         ..Welch = NA,
         ..Transform = NA,
         ..multipleDoingNull = NA,
@@ -882,7 +921,11 @@ BrawSimBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param Outliers .
 #' @param Cheating .
 #' @param CheatingAttempts .
-#' @param shorthand .
+#' @param ReplicationOn .
+#' @param ReplicationPower .
+#' @param ReplicationAttempts .
+#' @param ReplicationDecision .
+#' @param alphaSig .
 #' @param Welch .
 #' @param Transform .
 #' @param multipleDoingNull .
@@ -936,7 +979,7 @@ BrawSim <- function(
     IViqr = 4,
     IVncats = 2,
     IVprops = "1,1",
-    IV2on,
+    IV2on = FALSE,
     IV2name = "IV2",
     IV2type = "Interval",
     IV2mu = 0,
@@ -966,7 +1009,11 @@ BrawSim <- function(
     Outliers = 0,
     Cheating = "None",
     CheatingAttempts = 5,
-    shorthand = "no",
+    ReplicationOn = FALSE,
+    ReplicationPower = 0.8,
+    ReplicationAttempts = 1,
+    ReplicationDecision = "cautious",
+    alphaSig = 0.05,
     Welch = "no",
     Transform = "None",
     multipleDoingNull = "no",
@@ -1047,7 +1094,11 @@ BrawSim <- function(
         Outliers = Outliers,
         Cheating = Cheating,
         CheatingAttempts = CheatingAttempts,
-        shorthand = shorthand,
+        ReplicationOn = ReplicationOn,
+        ReplicationPower = ReplicationPower,
+        ReplicationAttempts = ReplicationAttempts,
+        ReplicationDecision = ReplicationDecision,
+        alphaSig = alphaSig,
         Welch = Welch,
         Transform = Transform,
         multipleDoingNull = multipleDoingNull,

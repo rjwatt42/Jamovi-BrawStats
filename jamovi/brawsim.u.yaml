@@ -429,6 +429,33 @@ children:
                                 name: CheatingAttempts
                                 margin: none
                                 format: number
+                  - type: CollapseBox
+                    label: Replication
+                    collapsed: true
+                    margin: none
+                    children:
+                      - type: LayoutBox
+                        style: list
+                        margin: none
+                        children:
+                          - type: LayoutBox
+                            style: inline
+                            margin: none
+                            children:
+                              - type: CheckBox
+                                name: ReplicationOn
+                                margin: none
+                              - type: TextBox
+                                name: ReplicationPower
+                                margin: none
+                                format: number
+                              - type: TextBox
+                                name: ReplicationAttempts
+                                margin: none
+                                format: number
+                              - type: ComboBox
+                                name: ReplicationDecision
+                                margin: none
       - type: CollapseBox
         collapsed: true
         label: Analysis
@@ -450,8 +477,9 @@ children:
                     name: Welch
                   - type: ComboBox
                     name: Transform
-                  - type: ComboBox
-                    name: shorthand
+                  - type: TextBox
+                    name: alphaSig
+                    format: number
   - type: Label
     label: Sample
     children:
