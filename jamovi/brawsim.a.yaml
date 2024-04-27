@@ -185,22 +185,22 @@ options:
     - name: EffectSize1
       title: IV->DV
       type: Number
-      default: 0.3
+      default: 0.0
     
     - name: EffectSize2
       title: IV2->DV
       type: Number
-      default: 0.3
+      default: 0.0
     
     - name: EffectSize3
       title: IV->IV2
       type: Number
-      default: 0.3
+      default: 0.0
     
     - name: EffectSize12
       title: 'IV*IV2->DV'
       type: Number
-      default: 0.3
+      default: 0.0
       
     - name: WorldOn
       title: ' '
@@ -337,6 +337,18 @@ options:
       type: Number
       default: 0.8
       
+    - name: ReplicationPrior
+      title: 'Prior'
+      type: List
+      options:
+      - name: none
+        title: none
+      - name: world
+        title: world
+      - name: prior
+        title: prior
+      default: none
+      
     - name: ReplicationAttempts
       title: 'Attempts'
       type: Number
@@ -357,6 +369,11 @@ options:
       - name: largeN
         title: largeN
       default: cautious
+      
+    - name: ReplicationAlpha
+      title: 'alpha'
+      type: Number
+      default: 0.05
 
     - name: alphaSig
       title: 'alphaSig'

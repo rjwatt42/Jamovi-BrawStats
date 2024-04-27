@@ -105,7 +105,9 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                          Replication=makeReplication(On=self$options$ReplicationOn,
                                                      Power=self$options$ReplicationPower,
                                                      Repeats=self$options$ReplicationAttempts,
-                                                     Keep=self$options$ReplicationDecision
+                                                     Keep=self$options$ReplicationDecision,
+                                                     RepAlpha=self$options$ReplicationAlpha,
+                                                     PowerPrior=self$options$ReplicationPrior
                                                      )
                          )
       changedD<- !identical(oldD,design)
@@ -120,13 +122,19 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       braw.def$hypothesis<<-hypothesis
       braw.def$design<<-design
       braw.def$evidence<<-evidence
-      if (changedH || changedD || changedE) {
+      if (changedH || changedD) {
         braw.res$result<<-NULL
         braw.res$expected<<-NULL
         braw.res$explore<<-NULL
         outputNow<-"System"
       }
-
+      if (changedE) {
+        braw.res$result<<-doAnalysis(sample=braw.res$result)
+        braw.res$expected<<-NULL
+        braw.res$explore<<-NULL
+        outputNow<-showSampleType
+      }
+      
       # did we ask for a new sample?
       if (makeSampleNow) {
         # make a sample

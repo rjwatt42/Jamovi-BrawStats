@@ -456,6 +456,17 @@ children:
                               - type: ComboBox
                                 name: ReplicationDecision
                                 margin: none
+                          - type: LayoutBox
+                            style: inline
+                            margin: none
+                            children:
+                              - type: TextBox
+                                name: ReplicationAlpha
+                                margin: none
+                                format: number
+                              - type: ComboBox
+                                name: ReplicationPrior
+                                margin: none
       - type: CollapseBox
         collapsed: true
         label: Analysis
