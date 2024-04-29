@@ -37,10 +37,12 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             IV2iqr = 4,
             IV2ncats = 2,
             IV2props = "1,1",
-            EffectSize1 = 0.3,
-            EffectSize2 = 0.3,
-            EffectSize3 = 0.3,
-            EffectSize12 = 0.3,
+            EffectSize1 = 0,
+            EffectSize2 = 0,
+            EffectSize3 = 0,
+            EffectSize12 = 0,
+            Heteroscedasticity = 0,
+            Residuals = "normal",
             WorldOn = FALSE,
             WorldPDF = "Single",
             WorldRZ = NULL,
@@ -58,9 +60,9 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             CheatingAttempts = 5,
             ReplicationOn = FALSE,
             ReplicationPower = 0.8,
-            ReplicationPrior = "none",
+            ReplicationPrior = "None",
             ReplicationAttempts = 1,
-            ReplicationDecision = "cautious",
+            ReplicationDecision = "Cautious",
             ReplicationAlpha = 0.05,
             alphaSig = 0.05,
             Welch = "no",
@@ -81,7 +83,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             exploreNPoints = 13,
             exploreMaxN = 250,
             exploreDoingNull = "no",
-            exploreNscale = FALSE,
+            exploreXLog = FALSE,
             numberExplores = 10,
             makeExploreBtn = NULL,
             typeExplore = "n",
@@ -233,19 +235,32 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..EffectSize1 <- jmvcore::OptionNumber$new(
                 "EffectSize1",
                 EffectSize1,
-                default=0.3)
+                default=0)
             private$..EffectSize2 <- jmvcore::OptionNumber$new(
                 "EffectSize2",
                 EffectSize2,
-                default=0.3)
+                default=0)
             private$..EffectSize3 <- jmvcore::OptionNumber$new(
                 "EffectSize3",
                 EffectSize3,
-                default=0.3)
+                default=0)
             private$..EffectSize12 <- jmvcore::OptionNumber$new(
                 "EffectSize12",
                 EffectSize12,
-                default=0.3)
+                default=0)
+            private$..Heteroscedasticity <- jmvcore::OptionNumber$new(
+                "Heteroscedasticity",
+                Heteroscedasticity,
+                default=0)
+            private$..Residuals <- jmvcore::OptionList$new(
+                "Residuals",
+                Residuals,
+                options=list(
+                    "normal",
+                    "skewed",
+                    "uniform",
+                    "cauchy"),
+                default="normal")
             private$..WorldOn <- jmvcore::OptionBool$new(
                 "WorldOn",
                 WorldOn,
@@ -346,10 +361,10 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "ReplicationPrior",
                 ReplicationPrior,
                 options=list(
-                    "none",
-                    "world",
-                    "prior"),
-                default="none")
+                    "None",
+                    "World",
+                    "Prior"),
+                default="None")
             private$..ReplicationAttempts <- jmvcore::OptionNumber$new(
                 "ReplicationAttempts",
                 ReplicationAttempts,
@@ -358,12 +373,12 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "ReplicationDecision",
                 ReplicationDecision,
                 options=list(
-                    "cautious",
-                    "last",
-                    "median",
-                    "smallP",
-                    "largeN"),
-                default="cautious")
+                    "Cautious",
+                    "Last",
+                    "Median",
+                    "SmallP",
+                    "LargeN"),
+                default="Cautious")
             private$..ReplicationAlpha <- jmvcore::OptionNumber$new(
                 "ReplicationAlpha",
                 ReplicationAlpha,
@@ -515,9 +530,9 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "no",
                     "yes"),
                 default="no")
-            private$..exploreNscale <- jmvcore::OptionBool$new(
-                "exploreNscale",
-                exploreNscale,
+            private$..exploreXLog <- jmvcore::OptionBool$new(
+                "exploreXLog",
+                exploreXLog,
                 default=FALSE)
             private$..numberExplores <- jmvcore::OptionNumber$new(
                 "numberExplores",
@@ -615,6 +630,8 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..EffectSize2)
             self$.addOption(private$..EffectSize3)
             self$.addOption(private$..EffectSize12)
+            self$.addOption(private$..Heteroscedasticity)
+            self$.addOption(private$..Residuals)
             self$.addOption(private$..WorldOn)
             self$.addOption(private$..WorldPDF)
             self$.addOption(private$..WorldRZ)
@@ -655,7 +672,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..exploreNPoints)
             self$.addOption(private$..exploreMaxN)
             self$.addOption(private$..exploreDoingNull)
-            self$.addOption(private$..exploreNscale)
+            self$.addOption(private$..exploreXLog)
             self$.addOption(private$..numberExplores)
             self$.addOption(private$..makeExploreBtn)
             self$.addOption(private$..typeExplore)
@@ -698,6 +715,8 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         EffectSize2 = function() private$..EffectSize2$value,
         EffectSize3 = function() private$..EffectSize3$value,
         EffectSize12 = function() private$..EffectSize12$value,
+        Heteroscedasticity = function() private$..Heteroscedasticity$value,
+        Residuals = function() private$..Residuals$value,
         WorldOn = function() private$..WorldOn$value,
         WorldPDF = function() private$..WorldPDF$value,
         WorldRZ = function() private$..WorldRZ$value,
@@ -738,7 +757,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         exploreNPoints = function() private$..exploreNPoints$value,
         exploreMaxN = function() private$..exploreMaxN$value,
         exploreDoingNull = function() private$..exploreDoingNull$value,
-        exploreNscale = function() private$..exploreNscale$value,
+        exploreXLog = function() private$..exploreXLog$value,
         numberExplores = function() private$..numberExplores$value,
         makeExploreBtn = function() private$..makeExploreBtn$value,
         typeExplore = function() private$..typeExplore$value,
@@ -780,6 +799,8 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..EffectSize2 = NA,
         ..EffectSize3 = NA,
         ..EffectSize12 = NA,
+        ..Heteroscedasticity = NA,
+        ..Residuals = NA,
         ..WorldOn = NA,
         ..WorldPDF = NA,
         ..WorldRZ = NA,
@@ -820,7 +841,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..exploreNPoints = NA,
         ..exploreMaxN = NA,
         ..exploreDoingNull = NA,
-        ..exploreNscale = NA,
+        ..exploreXLog = NA,
         ..numberExplores = NA,
         ..makeExploreBtn = NA,
         ..typeExplore = NA,
@@ -926,6 +947,8 @@ BrawSimBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param EffectSize2 .
 #' @param EffectSize3 .
 #' @param EffectSize12 .
+#' @param Heteroscedasticity .
+#' @param Residuals .
 #' @param WorldOn .
 #' @param WorldPDF .
 #' @param WorldRZ .
@@ -966,7 +989,7 @@ BrawSimBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param exploreNPoints .
 #' @param exploreMaxN .
 #' @param exploreDoingNull .
-#' @param exploreNscale .
+#' @param exploreXLog .
 #' @param numberExplores .
 #' @param makeExploreBtn .
 #' @param typeExplore .
@@ -1012,10 +1035,12 @@ BrawSim <- function(
     IV2iqr = 4,
     IV2ncats = 2,
     IV2props = "1,1",
-    EffectSize1 = 0.3,
-    EffectSize2 = 0.3,
-    EffectSize3 = 0.3,
-    EffectSize12 = 0.3,
+    EffectSize1 = 0,
+    EffectSize2 = 0,
+    EffectSize3 = 0,
+    EffectSize12 = 0,
+    Heteroscedasticity = 0,
+    Residuals = "normal",
     WorldOn = FALSE,
     WorldPDF = "Single",
     WorldRZ,
@@ -1033,9 +1058,9 @@ BrawSim <- function(
     CheatingAttempts = 5,
     ReplicationOn = FALSE,
     ReplicationPower = 0.8,
-    ReplicationPrior = "none",
+    ReplicationPrior = "None",
     ReplicationAttempts = 1,
-    ReplicationDecision = "cautious",
+    ReplicationDecision = "Cautious",
     ReplicationAlpha = 0.05,
     alphaSig = 0.05,
     Welch = "no",
@@ -1056,7 +1081,7 @@ BrawSim <- function(
     exploreNPoints = 13,
     exploreMaxN = 250,
     exploreDoingNull = "no",
-    exploreNscale = FALSE,
+    exploreXLog = FALSE,
     numberExplores = 10,
     makeExploreBtn,
     typeExplore = "n",
@@ -1103,6 +1128,8 @@ BrawSim <- function(
         EffectSize2 = EffectSize2,
         EffectSize3 = EffectSize3,
         EffectSize12 = EffectSize12,
+        Heteroscedasticity = Heteroscedasticity,
+        Residuals = Residuals,
         WorldOn = WorldOn,
         WorldPDF = WorldPDF,
         WorldRZ = WorldRZ,
@@ -1143,7 +1170,7 @@ BrawSim <- function(
         exploreNPoints = exploreNPoints,
         exploreMaxN = exploreMaxN,
         exploreDoingNull = exploreDoingNull,
-        exploreNscale = exploreNscale,
+        exploreXLog = exploreXLog,
         numberExplores = numberExplores,
         makeExploreBtn = makeExploreBtn,
         typeExplore = typeExplore,

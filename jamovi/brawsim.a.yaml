@@ -202,6 +202,25 @@ options:
       type: Number
       default: 0.0
       
+    - name: Heteroscedasticity
+      title: Heteroscedasticity
+      type: Number
+      default: 0.0
+      
+    - name: Residuals
+      title: Residuals
+      type: List
+      options:
+      - name: normal
+        title: normal
+      - name: skewed
+        title: skewed
+      - name: uniform
+        title: uniform
+      - name: cauchy
+        title: cauchy
+      default: normal
+      
     - name: WorldOn
       title: ' '
       type: Bool
@@ -307,7 +326,7 @@ options:
       default: 0
       
     - name: Cheating
-      title: Method
+      title: Cheating
       type: List
       options:
        - name: None
@@ -341,13 +360,13 @@ options:
       title: 'Prior'
       type: List
       options:
-      - name: none
-        title: none
-      - name: world
-        title: world
-      - name: prior
-        title: prior
-      default: none
+      - name: None
+        title: None
+      - name: World
+        title: World
+      - name: Prior
+        title: Prior
+      default: None
       
     - name: ReplicationAttempts
       title: 'Attempts'
@@ -358,17 +377,17 @@ options:
       title: 'Decision'
       type: List
       options:
-      - name: cautious
-        title: cautious
-      - name: last
-        title: last
-      - name: median
-        title: median
-      - name: smallP
-        title: smallP
-      - name: largeN
-        title: largeN
-      default: cautious
+      - name: Cautious
+        title: Cautious
+      - name: Last
+        title: Last
+      - name: Median
+        title: Median
+      - name: SmallP
+        title: SmallP
+      - name: LargeN
+        title: LargeN
+      default: Cautious
       
     - name: ReplicationAlpha
       title: 'alpha'
@@ -431,7 +450,7 @@ options:
       type: Action
 
     - name: singleVar1
-      title: ' var1:'
+      title: ' show:'
       type: List
       options:
         - name: r
@@ -449,7 +468,7 @@ options:
       default: r
 
     - name: singleVar2
-      title: ' var2:'
+      title: ' &'
       type: List
       options:
         - name: r
@@ -467,7 +486,7 @@ options:
       default: p
 
     - name: multipleVar1
-      title: ' var1:'
+      title: ' show:'
       type: List
       options:
         - name: r
@@ -485,7 +504,7 @@ options:
       default: r
 
     - name: multipleVar2
-      title: ' var2:'
+      title: ' &'
       type: List
       options:
         - name: r
@@ -583,7 +602,7 @@ options:
       default: all
 
     - name: exploreNPoints
-      title: exploreNPoints
+      title: 'explore points'
       type: Number
       default: 13
       
@@ -602,8 +621,8 @@ options:
         title: 'yes'
       default: 'no'
 
-    - name: exploreNscale
-      title: exploreNscale
+    - name: exploreXLog
+      title: 'log scale'
       type: Bool
       default: FALSE
 

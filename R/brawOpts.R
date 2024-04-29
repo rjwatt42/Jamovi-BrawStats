@@ -40,7 +40,7 @@ BrawOpts<-function(BW=FALSE,fontScale=1,newDev=FALSE,height=576,aspect=1.736) {
   # graph themes
   plotColours<-list(graphC="#BFECFF",graphBack="#999999",
                     maineffectES="#FFCC00",covariationES="#FF1100",interactionES="#0011FF",
-                    sampleC="#FFCC00",descriptionC="#FF9955",
+                    sampleC="#FFCC00",descriptionC="#FF9955",replicationC="#FF7755",
                     descriptionC1="#FF5533",descriptionC2="#CCBB33",
                     infer_sigC="#11CC00",infer_nsigC="#FF4400",infer_none="#AAAAAA",infer_miss=NULL,
                     infer_sigNonNull="#11CC00",infer_isigNonNull="#881100",infer_nsNonNull="#881100",infer_nsdNonNull="#DDCCCC",
@@ -163,7 +163,7 @@ BrawOpts<-function(BW=FALSE,fontScale=1,newDev=FALSE,height=576,aspect=1.736) {
           ##################################
           # default variables
           
-          # braw.env$variables<-makeDefaultVariables()
+          braw.env$variables<-makeDefaultVariables()
           
           ##################################
           # notation for effect sizes
@@ -259,7 +259,7 @@ BrawOpts<-function(BW=FALSE,fontScale=1,newDev=FALSE,height=576,aspect=1.736) {
           braw.env$allPositive<-bquote(.(Zchar) ~"+ve")
           braw.env$allNegative<-bquote(.(Zchar) ~"ns")
 
-braw.env<<-braw.env
+braw.env<<-braw.env          
 
 braw.def$IV<-makeVariable("IV")
 braw.def$IV2<-NULL
@@ -273,9 +273,9 @@ braw.def$metaAnalysis<-makeMetaAnalysis()
 
 braw.def<<-braw.def
 
-braw.res$result<-NULL
-braw.res$expected<-NULL
-braw.res$explore<-NULL
+braw.res$result<-NULL 
+braw.res$expected<-NULL 
+braw.res$explore<-NULL 
 
 braw.res<<-braw.res
 }

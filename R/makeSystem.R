@@ -23,7 +23,7 @@ makeWorld<-function(worldOn=FALSE,populationPDF="Single",populationRZ="r",
 # PREDICTION & DESIGN & EVIDENCE
 #' make an effect object
 #' 
-#' @param ResidDistr   "normal","skewed","uniform","Cauchy","t(3)"
+#' @param ResidDistr   "normal","skewed","uniform","cauchy","t(3)"
 #' @returns an effect object
 #' @examples
 #' makeEffect(rIV=0.3,rIV2=0,rIVIV2=0,rIVIV2DV=0,Heteroscedasticity=0,
@@ -121,18 +121,18 @@ makeSampling<-function(type="Random") {
 }
 #' make a replication object
 #' 
-#' @param Keep       "cautious", "last", "largeN", "smallP", "median"
+#' @param Keep       "Cautious", "Last", "LargeN", "SmallP", "Median"
 #' @param PowerPrior "None", "World", "Prior"
 #' @param BudgetType "Fixed", "Unlimited"
 #' @returns a replication object
 #' @examples
-#' makeReplication(On=FALSE,Repeats=1,Keep="last",RepAlpha=0.05,
+#' makeReplication(On=FALSE,Repeats=1,Keep="Cautious",RepAlpha=0.05,
 #'                 PowerOn=TRUE,Power=0.8,Tails=2,PowerPrior="None",
 #'                 forceSigOriginal="No",
 #'                 BudgetType="Unlimited",Budget=1000
 #'                 )
 #' @export
-makeReplication<-function(On=FALSE,Repeats=1,Keep="cautious",RepAlpha=0.05,
+makeReplication<-function(On=FALSE,Repeats=1,Keep="Cautious",RepAlpha=0.05,
                           PowerOn=TRUE,Power=0.8,Tails=2,PowerPrior="None",
                           forceSigOriginal=FALSE,
                           BudgetType="Unlimited",Budget=1000

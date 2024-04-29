@@ -299,15 +299,15 @@ dataBar<-function(data,colour="black",fill="white",alpha=1,barwidth=0.85) {
   }
   return(output)
 }
-dataPolygon<-function(data,colour="black",fill="white",alpha=1) {
+dataPolygon<-function(data,colour="black",fill="white",alpha=1,linewidth=0.25) {
   data<-reRangeXY(data)
   if (!is.null(data$ids)) {
-    geom_polygon(data=data,aes(x=x,y=y,group=ids,alpha=alpha*value),colour = colour, fill = fill)
+    geom_polygon(data=data,aes(x=x,y=y,group=ids,alpha=alpha*value),colour = colour, fill = fill,linewidth=linewidth)
   } else {
     if (!is.null(data$fill)) {
-      geom_polygon(data=data,aes(x=x,y=y, fill = fill),colour = colour,alpha=alpha)
+      geom_polygon(data=data,aes(x=x,y=y, fill = fill),colour = colour,alpha=alpha,linewidth=linewidth)
     } else {
-      geom_polygon(data=data,aes(x=x,y=y),colour = colour, fill = fill,alpha=alpha)
+      geom_polygon(data=data,aes(x=x,y=y),colour = colour, fill = fill,alpha=alpha,linewidth=linewidth)
     }
   }
 }

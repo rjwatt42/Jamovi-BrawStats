@@ -23,7 +23,6 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         )
         braw.env$statusStore<-statusStore
       }
-      
       statusStore<-braw.env$statusStore
       
       # get some flags for later
@@ -51,10 +50,10 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       outputNow<-statusStore$lastOutput
       if (self$options$showHypothesisBtn) outputNow<-"System"
 
-      if (self$options$showExploreParam != statusStore$showExploreParam) outputNow<-"Explore"
-      if (self$options$showMultipleParam != statusStore$showMultipleParam) outputNow<-"Multiple"
-      if (self$options$showInferParam != statusStore$showInferParam) outputNow<-"Infer"
-      if (self$options$showSampleType != statusStore$showSampleType) outputNow<-showSampleType
+      if (showExploreParam != statusStore$showExploreParam) outputNow<-"Explore"
+      if (showMultipleParam != statusStore$showMultipleParam) outputNow<-"Multiple"
+      if (showInferParam != statusStore$showInferParam) outputNow<-"Infer"
+      if (showSampleType != statusStore$showSampleType) outputNow<-showSampleType
 
       # make all the standard things we need
       locals<-list(hypothesis=NULL,design=NULL,evidence=NULL,
@@ -81,6 +80,8 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                          rIV2=self$options$EffectSize2,
                          rIVIV2<-self$options$EffectSize3,
                          rIVIV2DV<-self$options$EffectSize12,
+                         Heteroscedasticity=self$options$Heteroscedasticity,
+                         ResidDistr=self$options$Residuals,
                          world=makeWorld(worldOn=self$options$WorldOn,
                                          populationPDF=self$options$WorldPDF,
                                          populationRZ = self$options$WorldRZ,
@@ -122,6 +123,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       braw.def$hypothesis<<-hypothesis
       braw.def$design<<-design
       braw.def$evidence<<-evidence
+      
       if (changedH || changedD) {
         braw.res$result<<-NULL
         braw.res$expected<<-NULL
@@ -134,7 +136,6 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         braw.res$explore<<-NULL
         outputNow<-showSampleType
       }
-      
       # did we ask for a new sample?
       if (makeSampleNow) {
         # make a sample
@@ -152,11 +153,22 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       
       # did we ask for new explore?
       if (makeExploreNow) {
+        if ( !is.null(braw.res$explore) &&
+            (self$options$typeExplore!=braw.res$explore$explore$exploreType ||
+            self$options$exploreNPoints!=braw.res$explore$explore$exploreNPoints ||
+            self$options$exploreMaxN!=braw.res$explore$explore$max_n ||
+            self$options$exploreXLog!=braw.res$explore$explore$xlog) 
+            ){
+          braw.res$explore<<-NULL
+        }
+
         numberExplores<-self$options$numberExplores
         exploreResult<-doExplore(nsims=numberExplores,exploreResult=braw.res$explore,
                                  exploreType=typeExplore,
-                                          exploreNPoints=self$options$exploreNPoints,
-                                          doingNull=self$options$exploreDoingNull=="yes")
+                                 exploreNPoints=self$options$exploreNPoints,
+                                 max_n=self$options$exploreMaxN,
+                                 xlog=self$options$exploreXLog,
+                                 doingNull=self$options$exploreDoingNull=="yes")
         outputNow<-"Explore"
       }
       

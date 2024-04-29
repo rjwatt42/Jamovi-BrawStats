@@ -226,7 +226,7 @@ runExplore <- function(nsims,exploreResult,doingNull=FALSE,
             }
           },
           
-          "Keep"={vals<-c("cautious", "last", "largeN", "smallP", "median")},
+          "Keep"={vals<-c("Cautious", "Last", "LargeN", "SmallP", "Median")},
           "Power"={vals<-seq(0.1,0.9,length.out=npoints)},
           "Repeats" ={
             if (design$Replication$Keep=="median") vals<-seq(0,explore$Explore_nrRange,by=2)

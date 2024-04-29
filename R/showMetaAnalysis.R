@@ -38,13 +38,13 @@ showSingleMeta<-function(metaResult=doMetaAnalysis(1,makeMetaAnalysis(500)),show
   
   d1<-metaResult$result$rIV
   d1n<-(metaResult$result$rpIV==0)
-  x<-showAxis("r",hypothesis$effect)
+  x<-plotAxis("r",hypothesis$effect)
   xlim<-x$lim
   disp1<-x$label
   if (all(d1>=0)) xlim[1]<-0
   
   d2<-metaResult$result$nval
-  y<-showAxis("n",hypothesis$effect)
+  y<-plotAxis("n",hypothesis$effect)
   disp2<-y$label
   ylim<-y$lim
   

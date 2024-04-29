@@ -325,148 +325,157 @@ children:
                               - type: TextBox
                                 name: WorldNullP
                                 format: number
-          - type: ActionButton
-            name: showHypothesisBtn
+                      - type: CollapseBox
+                        collapsed: true
+                        label: Anomalies
+                        margin: none
+                        children:
+                          - type: LayoutBox
+                            style: inline
+                            margin: none
+                            children:
+                              - type: ComboBox
+                                name: Residuals
+                                margin: none
+                              - type: TextBox
+                                name: Heteroscedasticity
+                                margin: none
+                                format: number
       - type: LayoutBox
         style: inline
         children:
-        - type: CollapseBox
-          collapsed: true
-          label: Design
-          margin: none
-          children:
-          - type: LayoutBox
-            style: inline
+          - type: CollapseBox
+            collapsed: true
+            label: Design
+            margin: none
             children:
-              - type: Label
-                label: ' '
-                verticalAlignment: center
-                margin: small
-                minWidth: 13
               - type: LayoutBox
-                style: list
-                margin: none
+                style: inline
                 children:
-                  - type: CollapseBox
-                    label: Sampling
-                    collapsed: true
+                  - type: Label
+                    label: ' '
+                    verticalAlignment: center
+                    margin: small
+                    minWidth: 13
+                  - type: LayoutBox
+                    style: list
                     margin: none
                     children:
-                      - type: LayoutBox
-                        style: list
+                      - type: CollapseBox
+                        label: Sampling
+                        collapsed: true
                         margin: none
                         children:
                           - type: LayoutBox
-                            style: inline
+                            style: list
                             margin: none
                             children:
-                              - type: TextBox
-                                name: SampleSize
+                              - type: LayoutBox
+                                style: inline
                                 margin: none
-                                format: number
-                              - type: ComboBox
-                                name: SampleSpread
+                                children:
+                                  - type: TextBox
+                                    name: SampleSize
+                                    margin: none
+                                    format: number
+                                  - type: ComboBox
+                                    name: SampleSpread
+                                    margin: none
+                                  - type: TextBox
+                                    name: SampleGamma
+                                    margin: none
+                                    format: number
+                              - type: LayoutBox
+                                style: inline
                                 margin: none
-                              - type: TextBox
-                                name: SampleGamma
+                                children:
+                                  - type: ComboBox
+                                    name: SampleMethod
+                                    margin: none
+                              - type: LayoutBox
+                                style: inline
                                 margin: none
-                                format: number
-                          - type: LayoutBox
-                            style: inline
-                            margin: none
-                            children:
-                              - type: ComboBox
-                                name: SampleMethod
-                                margin: none
-                          - type: LayoutBox
-                            style: inline
-                            margin: none
-                            children:
-                              - type: ComboBox
-                                name: SampleUsage1
-                                margin: none
-                              - type: ComboBox
-                                name: SampleUsage2
-                                margin: none
-                  - type: CollapseBox
-                    label: Anomalies
-                    collapsed: true
-                    margin: none
-                    children:
-                      - type: LayoutBox
-                        style: list
+                                children:
+                                  - type: ComboBox
+                                    name: SampleUsage1
+                                    margin: none
+                                  - type: ComboBox
+                                    name: SampleUsage2
+                                    margin: none
+                      - type: CollapseBox
+                        label: Replication
+                        collapsed: true
                         margin: none
                         children:
                           - type: LayoutBox
-                            style: inline
+                            style: list
                             margin: none
                             children:
-                              - type: TextBox
-                                name: Dependence
+                              - type: LayoutBox
+                                style: inline
                                 margin: none
-                                format: number
-                              - type: TextBox
-                                name: Outliers
+                                children:
+                                  - type: CheckBox
+                                    name: ReplicationOn
+                                    margin: none
+                                  - type: TextBox
+                                    name: ReplicationPower
+                                    margin: none
+                                    format: number
+                                  - type: TextBox
+                                    name: ReplicationAttempts
+                                    margin: none
+                                    format: number
+                                  - type: ComboBox
+                                    name: ReplicationDecision
+                                    margin: none
+                              - type: LayoutBox
+                                style: inline
                                 margin: none
-                                format: number
-                  - type: CollapseBox
-                    label: Cheating
-                    collapsed: true
-                    margin: none
-                    children:
-                      - type: LayoutBox
-                        style: list
+                                children:
+                                  - type: TextBox
+                                    name: ReplicationAlpha
+                                    margin: none
+                                    format: number
+                                  - type: ComboBox
+                                    name: ReplicationPrior
+                                    margin: none
+                      - type: CollapseBox
+                        label: Anomalies
+                        collapsed: true
                         margin: none
                         children:
                           - type: LayoutBox
-                            style: inline
+                            style: list
                             margin: none
                             children:
-                              - type: ComboBox
-                                name: Cheating
+                              - type: LayoutBox
+                                style: inline
                                 margin: none
-                              - type: TextBox
-                                name: CheatingAttempts
-                                margin: none
-                                format: number
-                  - type: CollapseBox
-                    label: Replication
-                    collapsed: true
-                    margin: none
-                    children:
-                      - type: LayoutBox
-                        style: list
-                        margin: none
-                        children:
+                                children:
+                                  - type: TextBox
+                                    name: Dependence
+                                    margin: none
+                                    format: number
+                                  - type: TextBox
+                                    name: Outliers
+                                    margin: none
+                                    format: number
                           - type: LayoutBox
-                            style: inline
+                            style: list
                             margin: none
                             children:
-                              - type: CheckBox
-                                name: ReplicationOn
+                              - type: LayoutBox
+                                style: inline
                                 margin: none
-                              - type: TextBox
-                                name: ReplicationPower
-                                margin: none
-                                format: number
-                              - type: TextBox
-                                name: ReplicationAttempts
-                                margin: none
-                                format: number
-                              - type: ComboBox
-                                name: ReplicationDecision
-                                margin: none
-                          - type: LayoutBox
-                            style: inline
-                            margin: none
-                            children:
-                              - type: TextBox
-                                name: ReplicationAlpha
-                                margin: none
-                                format: number
-                              - type: ComboBox
-                                name: ReplicationPrior
-                                margin: none
+                                children:
+                                  - type: ComboBox
+                                    name: Cheating
+                                    margin: none
+                                  - type: TextBox
+                                    name: CheatingAttempts
+                                    margin: none
+                                    format: number
       - type: CollapseBox
         collapsed: true
         label: Analysis
@@ -491,6 +500,11 @@ children:
                   - type: TextBox
                     name: alphaSig
                     format: number
+      - type: LayoutBox
+        style: inline
+        children:
+        - type: ActionButton
+          name: showHypothesisBtn
   - type: Label
     label: Sample
     children:
@@ -520,7 +534,7 @@ children:
             name: showSampleType
           - type: ComboBox
             name: showInferParam
-            enable: (showSampleType:Infer)
+            enable: '(showSampleType:Infer)'
       - type: CollapseBox
         label: Multiple Samples
         collapsed: true
@@ -583,14 +597,14 @@ children:
                       - type: TextBox
                         name: exploreNPoints
                         format: number
+                      - type: CheckBox
+                        name: exploreXLog
                   - type: LayoutBox
                     style: inline
                     children:
                       - type: TextBox
                         name: exploreMaxN
                         format: number
-                      - type: CheckBox
-                        name: exploreNscale
           - type: LayoutBox
             style: inline
             margin: none
