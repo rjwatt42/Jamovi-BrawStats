@@ -506,17 +506,11 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 showMultipleParam,
                 options=list(
                     "Basic",
-                    "2D",
-                    "r",
-                    "p",
-                    "w",
-                    "n",
-                    "rp",
-                    "wp",
-                    "wn",
                     "NHST",
                     "FDR",
-                    "FMR"),
+                    "FMR",
+                    "2D",
+                    "Custom"),
                 default="Basic")
             private$..whichShowMultiple <- jmvcore::OptionList$new(
                 "whichShowMultiple",

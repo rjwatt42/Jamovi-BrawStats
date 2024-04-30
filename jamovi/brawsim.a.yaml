@@ -587,28 +587,16 @@ options:
       options:
         - name: Basic
           title: Basic
-        - name: 2D
-          title: 2D
-        - name: r
-          title: r
-        - name: p
-          title: p
-        - name: w
-          title: w
-        - name: n
-          title: n
-        - name: rp
-          title: rp
-        - name: wp
-          title: wp
-        - name: wn
-          title: wn
         - name: NHST
           title: NHST
         - name: FDR
           title: FDR
         - name: FMR
           title: FMR
+        - name: 2D
+          title: 2D
+        - name: Custom
+          title: Custom
       default: Basic
             
     - name: whichShowMultiple

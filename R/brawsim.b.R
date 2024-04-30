@@ -40,6 +40,9 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         dimensionMultiple<-"2D"
         showMultipleParam<-paste0(self$options$multipleVar1,";",self$options$multipleVar2)
       } else dimensionMultiple<-"1D"
+      if (showMultipleParam=="Custom") {
+        showMultipleParam<-paste0(self$options$multipleVar1,";",self$options$multipleVar2)
+      } 
       whichShowMultipleOut<-self$options$whichShowMultiple
 
       makeExploreNow<-self$options$makeExploreBtn
