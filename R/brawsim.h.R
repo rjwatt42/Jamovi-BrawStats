@@ -432,7 +432,10 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "w",
                     "n",
                     "rp",
-                    "wp"),
+                    "wp",
+                    "ro",
+                    "po",
+                    "no"),
                 default="r")
             private$..singleVar2 <- jmvcore::OptionList$new(
                 "singleVar2",
@@ -443,7 +446,10 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "w",
                     "n",
                     "rp",
-                    "wp"),
+                    "wp",
+                    "ro",
+                    "po",
+                    "no"),
                 default="p")
             private$..multipleVar1 <- jmvcore::OptionList$new(
                 "multipleVar1",
@@ -454,7 +460,10 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "w",
                     "n",
                     "rp",
-                    "wp"),
+                    "wp",
+                    "ro",
+                    "po",
+                    "no"),
                 default="r")
             private$..multipleVar2 <- jmvcore::OptionList$new(
                 "multipleVar2",
@@ -465,7 +474,10 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "w",
                     "n",
                     "rp",
-                    "wp"),
+                    "wp",
+                    "ro",
+                    "po",
+                    "no"),
                 default="p")
             private$..showSampleType <- jmvcore::OptionList$new(
                 "showSampleType",

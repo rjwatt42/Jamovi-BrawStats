@@ -132,7 +132,7 @@ r2llr<-function(r,n,df1,method=braw.env$STMethod,llr=list(e1=c(),e2=0),world=NUL
       world$populationPDF<-"Single"
       world$populationNullp<-0.5
     }
-    lk<-getLogLikelihood(z,n,df1,world$populationPDF,world$populationPDFk,worldDistNullP=c(0,1),remove_nonsig=FALSE)
+    lk<-getLogLikelihood(z,n,df1,world$populationPDF,world$populationPDFk,worldDistNullP=c(0,1),remove_nonsig=FALSE,doSeparate=TRUE)
     lk1<-lk[,,1]+log(1-world$populationNullp)
     lk2<-lk[,,2]+log(world$populationNullp)
     llk<-lk1-lk2
@@ -335,6 +335,7 @@ multipleAnalysis<-function(nsims=1,hypothesis,design,evidence,newResult=c()){
       newResult$roIV[j]<-res$roIV
       newResult$poIV[j]<-res$poIV
       newResult$nval[j]<-res$nval
+      newResult$noval[j]<-res$noval
       newResult$df1[j]<-res$df1
       if (!is.null(hypothesis$IV2)) {
         newResult$rIV2[j]<-res$rIV2
@@ -879,7 +880,7 @@ runSimulation<-function(hypothesis,design,evidence,sig_only=FALSE,onlyAnalysis=F
     res<-doAnalysis(oldResult,evidence,autoShow=FALSE)
     return(res)
   }
-  
+
   ntrials<-0
   p_min<-1
   while (1==1) {

@@ -465,6 +465,12 @@ options:
           title: rp
         - name: wp
           title: wp
+        - name: ro
+          title: ro
+        - name: po
+          title: po
+        - name: no
+          title: no
       default: r
 
     - name: singleVar2
@@ -483,6 +489,12 @@ options:
           title: rp
         - name: wp
           title: wp
+        - name: ro
+          title: ro
+        - name: po
+          title: po
+        - name: no
+          title: no
       default: p
 
     - name: multipleVar1
@@ -501,6 +513,12 @@ options:
           title: rp
         - name: wp
           title: wp
+        - name: ro
+          title: ro
+        - name: po
+          title: po
+        - name: no
+          title: no
       default: r
 
     - name: multipleVar2
@@ -519,6 +537,12 @@ options:
           title: rp
         - name: wp
           title: wp
+        - name: ro
+          title: ro
+        - name: po
+          title: po
+        - name: no
+          title: no
       default: p
 
     - name: showSampleType
