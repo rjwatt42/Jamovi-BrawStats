@@ -494,7 +494,7 @@ children:
                 margin: none
                 children:
                   - type: ComboBox
-                    name: Welch
+                    name: equalVar
                   - type: ComboBox
                     name: Transform
                   - type: TextBox
@@ -522,8 +522,10 @@ children:
                 minWidth: 13
               - type: ComboBox
                 name: singleVar1
+                enable: '(showInferParam:Custom || showInferParam:2D)'
               - type: ComboBox
                 name: singleVar2
+                enable: '(showInferParam:Custom || showInferParam:2D)'
       - type: LayoutBox
         style: inline
         margin: none
@@ -544,22 +546,26 @@ children:
             style: inline
             margin: none
             children:
+            - type: LayoutBox
+              style: inline
+              margin: none
+              children:
               - name: numberSamples
                 type: TextBox
                 format: number
-              - name: multipleDoingNull
-                type: ComboBox
-          - type: LayoutBox
-            style: inline
-            children:
+            - type: LayoutBox
+              style: inline
+              children:
               - type: Label
                 label: ' '
                 margin: small
                 minWidth: 13
               - type: ComboBox
                 name: multipleVar1
+                enable: '(showMultipleParam:Custom || showMultipleParam:2D)'
               - type: ComboBox
                 name: multipleVar2
+                enable: '(showMultipleParam:Custom || showMultipleParam:2D)'
       - type: LayoutBox
         style: inline
         margin: none
@@ -595,16 +601,10 @@ children:
                     style: inline
                     children:
                       - type: TextBox
-                        name: exploreNPoints
+                        name: exploreMaxN
                         format: number
                       - type: CheckBox
                         name: exploreXLog
-                  - type: LayoutBox
-                    style: inline
-                    children:
-                      - type: TextBox
-                        name: exploreMaxN
-                        format: number
           - type: LayoutBox
             style: inline
             margin: none
@@ -612,8 +612,22 @@ children:
               - name: numberExplores
                 type: TextBox
                 format: number
-              - name: exploreDoingNull
-                type: ComboBox
+              - type: TextBox
+                name: exploreNPoints
+                format: number
+              - type: LayoutBox
+                style: inline
+                children:
+                - type: Label
+                  label: ' '
+                  margin: small
+                  minWidth: 13
+                - type: ComboBox
+                  name: exploreVar1
+                  enable: '(showExploreParam:Custom || showExploreParam:2D)'
+                - type: ComboBox
+                  name: exploreVar2
+                  enable: '(showExploreParam:Custom || showExploreParam:2D)'
       - type: LayoutBox
         style: inline
         margin: none

@@ -395,19 +395,19 @@ options:
       default: 0.05
 
     - name: alphaSig
-      title: 'alphaSig'
+      title: 'alpha'
       type: Number
       default: 0.05
 
-    - name: Welch
-      title: 'Unequal variance'
+    - name: equalVar
+      title: 'Equal variance'
       type: List
       options:
       - name: no
         title: no
       - name: yes
         title: yes
-      default: no
+      default: yes
             
     - name: Transform
       title: Transform
@@ -420,16 +420,6 @@ options:
       - name: Exp
         title: Exp
       default: None
-      
-    - name: multipleDoingNull
-      title: 'include nulls'
-      type: List
-      options:
-      - name: 'no'
-        title: 'no'
-      - name: 'yes'
-        title: 'yes'
-      default: 'no'
 
     - name: showHypothesisBtn
       title: 'show'
@@ -465,6 +455,8 @@ options:
           title: rp
         - name: wp
           title: wp
+        - name: wn
+          title: wn
         - name: ro
           title: ro
         - name: po
@@ -489,6 +481,8 @@ options:
           title: rp
         - name: wp
           title: wp
+        - name: wn
+          title: wn
         - name: ro
           title: ro
         - name: po
@@ -513,6 +507,8 @@ options:
           title: rp
         - name: wp
           title: wp
+        - name: wn
+          title: wn
         - name: ro
           title: ro
         - name: po
@@ -537,6 +533,8 @@ options:
           title: rp
         - name: wp
           title: wp
+        - name: wn
+          title: wn
         - name: ro
           title: ro
         - name: po
@@ -565,20 +563,8 @@ options:
           title: Basic
         - name: 2D
           title: 2D
-        - name: r
-          title: r
-        - name: p
-          title: p
-        - name: w
-          title: w
-        - name: n
-          title: n
-        - name: rp
-          title: rp
-        - name: wp
-          title: wp
-        - name: wn
-          title: wn
+        - name: Custom
+          title: Custom
       default: Basic
       
     - name: showMultipleParam
@@ -589,10 +575,10 @@ options:
           title: Basic
         - name: NHST
           title: NHST
-        - name: FDR
-          title: FDR
-        - name: FMR
-          title: FMR
+        - name: Hits
+          title: Hits
+        - name: Misses
+          title: Misses
         - name: 2D
           title: 2D
         - name: Custom
@@ -614,7 +600,7 @@ options:
       default: all
 
     - name: exploreNPoints
-      title: 'explore points'
+      title: 'no of points'
       type: Number
       default: 13
       
@@ -622,16 +608,6 @@ options:
       title: exploreMaxN
       type: Number
       default: 250
-      
-    - name: exploreDoingNull
-      title: 'include nulls'
-      type: List
-      options:
-      - name: 'no'
-        title: 'no'
-      - name: 'yes'
-        title: 'yes'
-      default: 'no'
 
     - name: exploreXLog
       title: 'log scale'
@@ -703,6 +679,27 @@ options:
       title: ' show as:'
       type: List
       options:
+        - name: Basic
+          title: Basic
+        - name: 'p(sig)'
+          title: 'p(sig)'
+        - name: NHST
+          title: NHST
+        - name: Hits
+          title: Hits
+        - name: Misses
+          title: Misses
+        - name: 2D
+          title: 2D
+        - name: Custom
+          title: Custom
+      default: Basic
+
+
+    - name: exploreVar1
+      title: ' show:'
+      type: List
+      options:
         - name: r
           title: r
         - name: p
@@ -717,15 +714,39 @@ options:
           title: wp
         - name: wn
           title: wn
-        - name: 'p(sig)'
-          title: 'p(sig)'
-        - name: NHST
-          title: NHST
-        - name: FDR
-          title: FDR
-        - name: FMR
-          title: FMR
+        - name: ro
+          title: ro
+        - name: po
+          title: po
+        - name: no
+          title: no
       default: r
+
+    - name: exploreVar2
+      title: ' &'
+      type: List
+      options:
+        - name: r
+          title: r
+        - name: p
+          title: p
+        - name: w
+          title: w
+        - name: n
+          title: n
+        - name: rp
+          title: rp
+        - name: wp
+          title: wp
+        - name: wn
+          title: wn
+        - name: ro
+          title: ro
+        - name: po
+          title: po
+        - name: no
+          title: no
+      default: p
       
     - name: whichShowExplore
       title: " "

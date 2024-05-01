@@ -40,9 +40,10 @@ plotLimits<-function(xlim,ylim,orientation,gaps=c(1,1,0,0),fontScale=1) {
          )
 }
 
-startPlot<-function(xlim=c(0,1),ylim=c(0,1),box="both",top=FALSE,backC=braw.env$plotColours$graphBack,orientation="horz",fontScale=1,g=NULL) {
+startPlot<-function(xlim=c(0,1),ylim=c(0,1),box="both",top=FALSE,tight=FALSE,backC=braw.env$plotColours$graphBack,orientation="horz",fontScale=1,g=NULL) {
   minGap<-0.05
   maxGap<-0.125
+  if (tight) maxGap<-0.075
   switch(box,
          "X"=gaps<-c(0,maxGap),
          "x"=gaps<-c(minGap,maxGap),
@@ -225,13 +226,14 @@ horzLine<-function(intercept=NULL,linetype="solid",colour="black",alpha=1,linewi
   data<-data.frame(x=braw.env$plotLimits$xlim,y=intercept)
   geom_line(data=reRangeXY(data),aes(x=x,y=y),linetype=linetype, color=colour, alpha=alpha, linewidth=linewidth)
 }
-dataLabel<-function(data,label, hjust=0, vjust=0, fill="white",colour="black") {
+dataLabel<-function(data,label, hjust=0, vjust=0, fill="white",colour="black",parser=TRUE) {
   mathlabel<-grepl("['^']{1}",label) | grepl("['[']{1}",label)
   if (any(mathlabel)) {
     label<-deparse(label)
+    parser<-TRUE
     voff<-1
   } else {
-    label<-deparse(bquote(.(label)))
+    if (parser) label<-deparse(bquote(.(label)))
     voff<-0
   }
   data<-reRangeXY(data)
@@ -240,7 +242,7 @@ dataLabel<-function(data,label, hjust=0, vjust=0, fill="white",colour="black") {
            geom_label(data=data,aes(x = x, y = y), label=label, 
                       hjust=hjust, vjust=vjust, nudge_y=voff,
                fill=fill,color=colour,
-               size=braw.env$labelSize*braw.env$plotLimits$fontScale,parse=TRUE),
+               size=braw.env$labelSize*braw.env$plotLimits$fontScale,parse=parser),
          "vert"=   
            geom_label(data=data,aes(x = x, y = y), label=label, 
                       hjust=vjust,vjust=hjust,  nudge_y=voff,
@@ -358,9 +360,9 @@ dataLegend<-function(data,title="title",fontsize=3.5) {
   )
 }
 
-dataContour<-function(data,colour="black",breaks=c(0.1,0.3,0.5,0.7,0.9),lwd=0.25) {
+dataContour<-function(data,colour="black",breaks=c(0.1,0.3,0.5,0.7,0.9),linewidth=0.25,linetype="solid") {
   data<-reRangeXY(data)
-  geom_contour(data=data,aes(x=x,y=y,z=z),colour=colour,breaks=breaks,lwd=lwd)
+  geom_contour(data=data,aes(x=x,y=y,z=z),colour=colour,breaks=breaks,lwd=linewidth,lty=linetype)
 }
 
 darken <- function(col,gain=1,off=0) {

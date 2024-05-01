@@ -33,6 +33,9 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         dimensionInfer<-"2D"
         showInferParam<-paste0(self$options$singleVar1,";",self$options$singleVar2)
       } else dimensionInfer<-"1D"
+      if (showInferParam=="Custom") {
+        showInferParam<-paste0(self$options$singleVar1,";",self$options$singleVar2)
+      } 
       
       makeMultipleNow<-self$options$makeMultipleBtn
       showMultipleParam<-self$options$showMultipleParam
@@ -44,19 +47,23 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         showMultipleParam<-paste0(self$options$multipleVar1,";",self$options$multipleVar2)
       } 
       whichShowMultipleOut<-self$options$whichShowMultiple
-
+      
+      showExploreParam<-self$options$showExploreParam
+      if (showExploreParam=="Custom") {
+        showExploreParam<-paste0(self$options$exploreVar1,";",self$options$exploreVar2)
+      } 
+      
       makeExploreNow<-self$options$makeExploreBtn
       typeExplore<-self$options$typeExplore
-      showExploreParam<-self$options$showExploreParam
       whichShowExploreOut<-self$options$whichShowExplore
       
       outputNow<-statusStore$lastOutput
       if (self$options$showHypothesisBtn) outputNow<-"System"
 
-      if (showExploreParam != statusStore$showExploreParam) outputNow<-"Explore"
-      if (showMultipleParam != statusStore$showMultipleParam) outputNow<-"Multiple"
-      if (showInferParam != statusStore$showInferParam) outputNow<-"Infer"
-      if (showSampleType != statusStore$showSampleType) outputNow<-showSampleType
+      if (showExploreParam != statusStore$showExploreParam && !is.null(braw.res$explore)) outputNow<-"Explore"
+      if (showMultipleParam != statusStore$showMultipleParam && !is.null(braw.res$expected)) outputNow<-"Multiple"
+      if (showInferParam != statusStore$showInferParam && !is.null(braw.res$result)) outputNow<-"Infer"
+      if (showSampleType != statusStore$showSampleType && !is.null(braw.res$result)) outputNow<-showSampleType
 
       # make all the standard things we need
       locals<-list(hypothesis=NULL,design=NULL,evidence=NULL,
@@ -117,15 +124,23 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       changedD<- !identical(oldD,design)
       
       oldE<-braw.def$evidence
-      evidence<-makeEvidence(Welch=self$options$Welch=="yes",
+      evidence<-makeEvidence(Welch=self$options$equalVar=="no",
                                     Transform=self$options$Transform
                                     )
       changedE<- !identical(oldE,evidence)
       braw.env$alphaSig<<-self$options$alphaSig
       
+      oldX<-braw.def$explore
+      explore<-makeExplore(exploreType=typeExplore,
+                           exploreNPoints=self$options$exploreNPoints,
+                           max_n=self$options$exploreMaxN,
+                           xlog=self$options$exploreXLog)
+      changedX<- !identical(oldX,explore)
+      
       braw.def$hypothesis<<-hypothesis
       braw.def$design<<-design
       braw.def$evidence<<-evidence
+      braw.def$explore<<-explore
       
       if (changedH || changedD) {
         braw.res$result<<-NULL
@@ -139,6 +154,11 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         braw.res$explore<<-NULL
         outputNow<-showSampleType
       }
+      if (changedX) {
+        braw.res$explore<<-NULL
+        outputNow<-"System"
+      }
+      
       # did we ask for a new sample?
       if (makeSampleNow) {
         # make a sample
@@ -149,29 +169,14 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       # did we ask for new multiples?
       if (makeMultipleNow) {
         numberSamples<-self$options$numberSamples
-        expectedResult<-doExpected(nsims=numberSamples,expectedResult=braw.res$expected,
-                                     doingNull=self$options$multipleDoingNull=="yes")
+        expectedResult<-doExpected(nsims=numberSamples,expectedResult=braw.res$expected)
         outputNow<-"Multiple"
       }
       
       # did we ask for new explore?
       if (makeExploreNow) {
-        if ( !is.null(braw.res$explore) &&
-            (self$options$typeExplore!=braw.res$explore$explore$exploreType ||
-            self$options$exploreNPoints!=braw.res$explore$explore$exploreNPoints ||
-            self$options$exploreMaxN!=braw.res$explore$explore$max_n ||
-            self$options$exploreXLog!=braw.res$explore$explore$xlog) 
-            ){
-          braw.res$explore<<-NULL
-        }
-
         numberExplores<-self$options$numberExplores
-        exploreResult<-doExplore(nsims=numberExplores,exploreResult=braw.res$explore,
-                                 exploreType=typeExplore,
-                                 exploreNPoints=self$options$exploreNPoints,
-                                 max_n=self$options$exploreMaxN,
-                                 xlog=self$options$exploreXLog,
-                                 doingNull=self$options$exploreDoingNull=="yes")
+        exploreResult<-doExplore(nsims=numberExplores,exploreResult=braw.res$explore)
         outputNow<-"Explore"
       }
       
@@ -208,7 +213,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                },
                "Explore"={
                  self$results$graphPlot$setState(c(outputNow,showExploreParam,whichShowExploreOut))
-                 self$results$reportPlot$setState(c(outputNow,showExploreParam))
+                 # self$results$reportPlot$setState(c(outputNow,showExploreParam))
                },
                {
                  self$results$graphPlot$setState(outputNow)

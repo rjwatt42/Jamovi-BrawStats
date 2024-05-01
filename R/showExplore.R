@@ -46,8 +46,8 @@ trimExploreResult<-function(result,nullresult) {
 
 #' show the estimated population characteristics from varying parameter
 #' 
-#' @param showType        "r","p","w","wn", "p(sig)" \cr
-#' "NHST", "tDR","fDR","fMR"
+#' @param showType        "Basic","p(sig)","NHST", "Hits","Misses" \cr
+#'  or one or two of: "r","p","w","wn" eg "p;w"
 #' @return ggplot2 object - and printed
 #' @examples
 #' showExplore(exploreResult=doExplore(),
@@ -59,14 +59,24 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
 
   if (is.null(exploreResult)) exploreResult=doExplore()
   
+  if (showType=="Basic") showType<-"r;p"
+  showType<-strsplit(showType,";")[[1]]
+
+  if (!exploreResult$hypothesis$effect$world$worldOn && is.element(showType[1],c("NHST","Hits","Misses"))) {
+    if (exploreResult$nullcount<exploreResult$count) {
+      exploreResult<-doExplore(0,exploreResult,doingNull=TRUE)
+    }
+  }
+  
   quants<-0.25
   showPower<-FALSE
   
   explore<-exploreResult$explore
-  hypothesis<-explore$hypothesis
+  hypothesis<-exploreResult$hypothesis
   effect<-hypothesis$effect
-  design<-explore$design
-  evidence<-explore$evidence
+  design<-exploreResult$design
+  evidence<-exploreResult$evidence
+  
   
   oldAlpha<-braw.env$alphaSig
   on.exit(braw.env$alphaSig<-oldAlpha)
@@ -75,6 +85,26 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
   
   if (explore$exploreType=="rIV" && braw.env$RZ=="z") {
     vals<-atanh(vals)
+  }
+  
+  if (!is.null(hypothesis$IV2) && whichEffect=="All") {
+    plots<-matrix(c(0,0.33,0.65),nrow=1,byrow=TRUE)
+    plotWidth<-0.35
+    whichEffects<-1:3
+  } else {
+    switch (length(showType),
+            {plots<-matrix(0)
+            plotWidth<-1},
+            {plots<-matrix(c(0,0.5),nrow=2)
+            plotWidth<-0.5}
+    )
+    if (!is.null(hypothesis$IV2)) 
+      switch (whichEffect,
+              "Main 1"=whichEffects<-1,
+              "Main 2"=whichEffects<-2,
+              "rIVIV2DV"=whichEffects<-3
+      )
+    else whichEffects<-1
   }
   
   if (is.character(vals[1]) || length(vals)<10) {
@@ -93,35 +123,63 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
     doLine=TRUE
   }
   
-  yaxis<-plotAxis(showType,effect)
+  g<-ggplot()+braw.env$plotRect+braw.env$blankTheme()
+  
+  for (si in 1:length(showType)) {
+    
+  yaxis<-plotAxis(showType[si],effect)
   ylim<-yaxis$lim
   ylabel<-yaxis$label
   ycols<-yaxis$cols
   ylines<-yaxis$lines
   ySecond<-NULL
   
-  if (showType=="p" && braw.env$pPlotScale=="log10") 
+  if (showType[si]=="p" && braw.env$pPlotScale=="log10") 
     while (mean(log10(exploreResult$result$pval)>ylim[1])<0.75) ylim[1]<-ylim[1]-1
   
-  if (!is.null(hypothesis$IV2) && whichEffect=="All") {
-    plots<-c(0,0.33,0.65)
-    plotWidth<-0.35
-  } else {
-    plots<-0
-    plotWidth<-1
-    if (!is.null(hypothesis$IV2)) 
-      switch (whichEffect,
-              "Main 1"=whichEffect<-1,
-              "Main 2"=whichEffect<-2,
-              "rIVIV2DV"=whichEffect<-3
-      )
-    else whichEffect<-1
-  }
+  col2<-braw.env$plotColours$infer_miss
+  col3<-braw.env$plotColours$infer_miss
+  col5<-braw.env$plotColours$infer_sigNull
+  switch (braw.env$STMethod,
+          "NHST"={
+            col1<-NULL
+            col0<-braw.env$plotColours$infer_sigNonNull
+            col4<-NULL
+          },
+          "sLLR"={
+            col1<-NULL
+            col0<-braw.env$plotColours$infer_nsNonNull
+            col4<-NULL
+          },
+          "dLLR"={
+            col1<-braw.env$plotColours$infer_isigNonNull
+            col0<-braw.env$plotColours$infer_nsdNonNull
+            col4<-braw.env$plotColours$infer_isigNull
+          }
+  )
+  lb0<-braw.env$nonNullPositive
+  lb1<-braw.env$nonNullNegative
+  lb2<-braw.env$nonNullNS
+  lb3<-braw.env$nullNS
+  lb4<-braw.env$nullNegative
+  lb5<-braw.env$nullPositive
   
-  g<-ggplot()+braw.env$plotRect+braw.env$blankTheme()
-  for (whichEffect in 1:length(plots)) {
-    braw.env$plotArea<-c(plots[whichEffect],0,plotWidth,1)
-    g<-startPlot(xlim,ylim,top=TRUE,g=g)
+  yn<-0.5
+  lb0xy<-data.frame(x=max(xlim),y=1-yn/10)
+  yn<-yn+1
+  lb1xy<-data.frame(x=max(xlim),y=1-yn/10)
+  yn<-yn+1
+  lb2xy<-data.frame(x=max(xlim),y=1-yn/10)
+  yn<-0.5
+  lb5xy<-data.frame(x=max(xlim),y=0+yn/10)
+  yn<-yn+1
+  lb4xy<-data.frame(x=max(xlim),y=0+yn/10)
+  yn<-yn+1
+  lb3xy<-data.frame(x=max(xlim),y=0+yn/10)
+  
+  for (whichEffect in whichEffects) {
+    braw.env$plotArea<-c(plots[si,whichEffect],0,plotWidth,1)
+    g<-startPlot(xlim,ylim,box="Both",top=TRUE,tight=TRUE,g=g)
     g<-g+xAxisLabel(bquote(bold(.(explore$exploreType))))+xAxisTicks(xbreaks,xnames,logScale=explore$xlog)
     g<-g+yAxisLabel(ylabel)+yAxisTicks(logScale=yaxis$logScale)
     col<-ycols[1]
@@ -174,8 +232,8 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
              }
       )
       basenpts<-51
-      if (is.element(showType,c("r","p","w","wn"))) {
-        switch(showType,
+      if (is.element(showType[si],c("r","p","w","wp","wn"))) {
+        switch(showType[si],
                "r"={
                  basevals<-seq(-1,1,length.out=basenpts)*braw.env$r_range
                  logScale<-FALSE
@@ -190,6 +248,10 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
                  }
                },
                "w"={
+                 basevals<-seq(braw.env$alphaSig*1.01,1/1.01,length.out=basenpts)
+                 logScale<-FALSE
+               },
+               "wp"={
                  basevals<-seq(braw.env$alphaSig*1.01,1/1.01,length.out=basenpts)
                  logScale<-FALSE
                },
@@ -214,7 +276,7 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
           design$sN<-nVals[i]
           hypothesis$effect$world$populationNullp<-nullPs[i]
           r<-fullRSamplingDist(basevals,hypothesis$effect$world,design,
-                               doStat=showType,logScale=logScale,quantiles=c(0.25,0.5,0.75))
+                               doStat=showType[si],logScale=logScale,quantiles=c(0.25,0.5,0.75))
           if (length(r)==1) theoryVals<-c(theoryVals,r)
           else {
             theoryLower<-c(theoryLower,r[1])
@@ -228,7 +290,7 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
           theoryLower<-log10(theoryLower)
         }
       }
-      if (showType=="p(sig)") {
+      if (showType[si]=="p(sig)") {
         for (i in 1:length(newvals)) {
           hypothesis$effect$world$populationPDFk<-rVals[i]
           design$sN<-nVals[i]
@@ -237,7 +299,7 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
           theoryVals<-c(theoryVals,r)
         }
       }
-      if (is.element(showType,c("NHST","tDR","fDR","fMR"))) {
+      if (is.element(showType[si],c("NHST","Hits","Misses"))) {
         Nullp<-hypothesis$effect$world$populationNullp
         hypothesis$effect$world$populationNullp<-0
         theoryVals1<-c()
@@ -248,66 +310,22 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
           r<-fullPSig(hypothesis$effect$world,design,alpha=alphas[i])
           theoryVals1<-c(theoryVals1,r)
         }
-        switch(showType,
+        switch(showType[si],
                "NHST"={
                  theoryVals1<-theoryVals1*(1-nullPs)
                  theoryVals0<-theoryVals1*0+alphas*nullPs
                  theoryVals2<-theoryVals0*0+nullPs
                },
-               "fDR"={
-                 theoryVals<-alphas*nullPs/(theoryVals1*(1-nullPs)+alphas*nullPs)
+               "Hits"={
+                 theoryVals<-theoryVals1*(1-nullPs)/(theoryVals1*(1-nullPs)+alphas*nullPs)
                  theoryVals1<-c()
                },
-               "tDR"={
-                 theoryVals<-1-alphas*nullPs/(theoryVals1*(1-nullPs)+alphas*nullPs)
-                 theoryVals1<-c()
-               },
-               "fMR"={
+               "Misses"={
                  theoryVals<-(1-theoryVals1)*(1-nullPs)/((1-theoryVals1)*(1-nullPs)+(1-alphas)*nullPs)
                  theoryVals1<-c()
                }
         )
         hypothesis$effect$world$populationNullp<-Nullp
-        
-        switch (braw.env$STMethod,
-                "NHST"={
-                  col1<-NULL
-                  col0<-braw.env$plotColours$infer_sigNonNull
-                  col4<-NULL
-                  },
-                "sLLR"={
-                  col1<-NULL
-                  col0<-braw.env$plotColours$infer_nsNonNull
-                  col4<-NULL
-                },
-                "dLLR"={
-                  col1<-braw.env$plotColours$infer_isigNonNull
-                  col0<-braw.env$plotColours$infer_nsdNonNull
-                  col4<-braw.env$plotColours$infer_isigNull
-                }
-        )
-        lb0<-braw.env$nonNullPositive
-        lb1<-braw.env$nonNullNegative
-        lb2<-braw.env$nonNullNS
-        lb3<-braw.env$nullNS
-        lb4<-braw.env$nullNegative
-        lb5<-braw.env$nullPositive
-
-        col2<-braw.env$plotColours$infer_miss
-        col3<-braw.env$plotColours$infer_miss
-        col5<-braw.env$plotColours$infer_sigNull
-        yn<-0.5
-        lb0xy<-data.frame(x=max(xlim),y=1-yn/10)
-        yn<-yn+1
-        lb1xy<-data.frame(x=max(xlim),y=1-yn/10)
-        yn<-yn+1
-        lb2xy<-data.frame(x=max(xlim),y=1-yn/10)
-        yn<-0.5
-        lb5xy<-data.frame(x=max(xlim),y=0+yn/10)
-        yn<-yn+1
-        lb4xy<-data.frame(x=max(xlim),y=0+yn/10)
-        yn<-yn+1
-        lb3xy<-data.frame(x=max(xlim),y=0+yn/10)
       }
       
       if (explore$xlog) newvals<-log10(newvals)
@@ -352,7 +370,7 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
       nVals<-result$nval
       df1Vals<-result$df1
       
-      switch (showType,
+      switch (showType[si],
               "r"={
                 showVals<-rVals
                 if (braw.env$RZ=="z") {showVals<-atanh(showVals)}
@@ -365,6 +383,12 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
               },
               "w"={
                 showVals<-rn2w(rVals,result$nval)
+                if (braw.env$wPlotScale=="log10"){
+                  showVals<-log10(showVals)
+                }
+              },
+              "wp"={
+                showVals<-rn2w(rpVals,result$nval)
                 if (braw.env$wPlotScale=="log10"){
                   showVals<-log10(showVals)
                 }
@@ -442,17 +466,17 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
                 showMeans<-1-colMeans(abs(sigs & nulls))/colMeans(abs(sigs))
                 showSE<-NULL
               },
-              "fDR"={
+              "Hits"={
                 showVals<-NULL
                 if (explore$exploreType=="Alpha") {
                   braw.env$alphaSig<-exploreResult$vals
                 }
                 nulls<-result$rpval==0
                 sigs<-isSignificant(braw.env$STMethod,pVals,rVals,nVals,df1Vals,evidence,braw.env$alphaSig)
-                showMeans<-colMeans(abs(sigs & nulls))/colMeans(abs(sigs))
+                showMeans<-colMeans(abs(sigs & !nulls))/colMeans(abs(sigs))
                 showSE<-NULL
               },
-              "fMR"={
+              "Misses"={
                 showVals<-NULL
                 if (explore$exploreType=="Alpha") {
                   braw.env$alphaSig<-exploreResult$vals
@@ -491,9 +515,9 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
               }
       )
       
-      if (!is.element(showType,c("NHST"))) {
+      if (!is.element(showType[si],c("NHST"))) {
         # draw the basic line and point data
-        if (is.element(showType,c("p(sig)","tDR","fDR","fMR"))) {
+        if (is.element(showType[si],c("p(sig)","Hits","Misses"))) {
           y50<-showMeans
           y75<-NULL
         } else {
@@ -537,7 +561,7 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
             for (i in 1:length(vals))
               g<-expected_plot(g,
                                data.frame(x=vals[i],y1=showVals[,i],y2=sigVals[,i]),
-                               showType=showType,ylim=ylim,scale=2.25/(length(vals)+1),col=col)
+                               showType=showType[si],ylim=ylim,scale=2.25/(length(vals)+1),col=col)
           }
           g<-g+dataPoint(data=pts0f,fill=col,size=4)
           if (!is.null(y75)) {
@@ -557,7 +581,10 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
           if (showTheory) pts0<-data.frame(x=vals,y=ybottom)
           else            pts0<-data.frame(x=c(vals,rev(vals)),y=c(ybottom,rev(ytop)))
           ytop<-ybottom
-        } else {pts0<-NULL}
+        } else {
+          ybottom<-ytop
+          pts0<-NULL
+          }
         
         # error Z+
         if (any(isigNonNulls!=0)) {
@@ -650,7 +677,7 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
       }
       
       # find n80
-      if (showType=="p(sig)" && explore$exploreType=="n" && effect$world$populationPDF=="Single" && showPower){
+      if (showType[si]=="p(sig)" && explore$exploreType=="n" && effect$world$populationPDF=="Single" && showPower){
         w<-y50
         n<-exploreResult$vals
         minrw<-function(r,w,n){sum(abs(w-rn2w(r,n)),na.rm=TRUE)}
@@ -677,7 +704,7 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
       }
       
       # find r80
-      if (showType=="p(sig)" && explore$exploreType=="rIV" && showPower){
+      if (showType[si]=="p(sig)" && explore$exploreType=="rIV" && showPower){
         w<-y50
         r<-exploreResult$vals
         minrw<-function(r,w,n){sum(abs(w-rn2w(r,n)),na.rm=TRUE)}
@@ -702,7 +729,7 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
       }
     }
     
-    if (showType=="NHST") {
+    if (showType[si]=="NHST") {
       if (doLine) xoff<-0
       else        xoff<-bwidth
       
@@ -715,10 +742,11 @@ showExplore<-function(exploreResult=braw.res$explore,showType="r",showTheory=FAL
     }
 
     lineCol<-"black"
-    if (is.element(showType,c("p","e1","e2","e1d","e2d"))) lineCol<-"green"
+    if (is.element(showType[si],c("p","e1","e2","e1d","e2d"))) lineCol<-"green"
     for (yl in ylines) {
       g<-g+horzLine(yl,linetype="dotted",colour=lineCol)
     }
+  }
   }
   if (exploreResult$count>0)
   g<-g+plotTitle(paste0("Explore: ",brawFormat(exploreResult$count)),"right")
