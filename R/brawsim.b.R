@@ -12,7 +12,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       # self$results$debug$setVisible(TRUE)
       # self$results$debug$setContent(c(self$options$showExploreBtn,is.null(dataStore$exploreResult)))
 
-      # initialization code
+      # initialization code 
       if (!exists("braw.env")) {
         BrawOpts(fontScale = 1.35)
         statusStore<-list(lastOutput="System",
@@ -21,7 +21,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                           showMultipleParam="Basic",
                           showExploreParam="r"
         )
-        braw.env$statusStore<-statusStore
+        braw.env$statusStore<<-statusStore
       }
       statusStore<-braw.env$statusStore
       
@@ -58,13 +58,16 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       whichShowExploreOut<-self$options$whichShowExplore
       
       outputNow<-statusStore$lastOutput
+      outputNow1<-outputNow
       if (self$options$showHypothesisBtn) outputNow<-"System"
-
+      outputNow2<-outputNow
+      
       if (showExploreParam != statusStore$showExploreParam && !is.null(braw.res$explore)) outputNow<-"Explore"
       if (showMultipleParam != statusStore$showMultipleParam && !is.null(braw.res$expected)) outputNow<-"Multiple"
       if (showInferParam != statusStore$showInferParam && !is.null(braw.res$result)) outputNow<-"Infer"
       if (showSampleType != statusStore$showSampleType && !is.null(braw.res$result)) outputNow<-showSampleType
-
+      outputNow3<-outputNow
+      
       # make all the standard things we need
       locals<-list(hypothesis=NULL,design=NULL,evidence=NULL,
                    sample=NULL,analysis=NULL,explore=NULL)
@@ -160,10 +163,12 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       }
       
       # did we ask for a new sample?
+      newSample<-FALSE
       if (makeSampleNow) {
         # make a sample
         result<-doResult()
         outputNow<-showSampleType
+        newSample<-TRUE
       }
       
       # did we ask for new multiples?
@@ -190,9 +195,11 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       statusStore$showMultipleParam<-self$options$showMultipleParam
       statusStore$showExploreParam<-self$options$showExploreParam
       # save everything for the next round      
-      braw.env$statusStore<-statusStore
+      braw.env$statusStore<<-statusStore
       
       # main results graphs/reports
+      self$results$debug$setVisible(TRUE)
+      self$results$debug$setContent(c(outputNow1,outputNow2,outputNow3,"=",outputNow,showSampleType))
       if (!is.null(outputNow))     
         switch(outputNow,
                "Sample"={
@@ -219,6 +226,43 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                  self$results$graphPlot$setState(outputNow)
                }
         )
+      
+      if (!is.null(braw.res$result)) {
+        if (is.null(IV2)) {
+          newVariables<-data.frame(braw.res$result$dv,braw.res$result$iv,braw.res$result$dv+NA)
+          names(newVariables)<-c(DV$name,IV$name,"-")
+        } else {
+          newVariables<-data.frame(braw.res$result$dv,braw.res$result$iv,braw.res$result$iv2)
+          names(newVariables)<-c(DV$name,IV$name,IV2$name)
+        }
+        nvars<-length(newVariables)
+        
+        keys<-1:nvars
+        measureTypes<-sapply(newVariables,function(x) { if (is.character(x)) "Nominal" else "Continuous"})
+        
+        self$results$sendSample$set(keys=keys,titles=names(newVariables),
+                                    descriptions=rep("simulated",nvars),
+                                    measureTypes=measureTypes
+        )
+        self$results$sendSample$setValues(newVariables)
+      }
+      
+      if (!is.null(braw.res$expected)) {
+        q<-mergeExpected(braw.res$expected$result,braw.res$expected$nullresult)
+          newMultiple<-data.frame(q$rIV,q$nval,q$pIV)
+          newMultiple<-newMultiple[!is.na(newMultiple$q.rIV),]
+          names(newMultiple)<-c("rs","n","p")
+        nvars<-length(newMultiple)
+        
+        keys<-1:nvars
+        self$results$sendMultiple$set(keys=keys,titles=names(newMultiple),
+                                    descriptions=rep("simulated",nvars),
+                                    measureTypes=rep("Continuous",nvars)
+        )
+        self$results$sendMultiple$setValues(newMultiple)
+      }
+      
+      # end of .run()
     },
     
     .plotGraph=function(image, ...) {

@@ -761,4 +761,15 @@ options:
       - name: all
         title: all
       default: all
+      
+    - name: sendSample
+      title: sample
+      type: Output
+      default: TRUE
+      
+    - name: sendMultiple
+      title: multiple
+      type: Output
+      default: TRUE
+
 ...

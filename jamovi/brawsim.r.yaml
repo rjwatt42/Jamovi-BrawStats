@@ -27,10 +27,21 @@ items:
       type: Preformatted
       visible: FALSE
 
-    # - name: sendJamovi
-    #   type: Output
-    #   measureType: nominal
-    #   varTitle: Braw
+    - name: sendSample
+      type: Output
+      measureType: nominal
+      varTitle: Sample
+      items: 3
+      clearWith:
+       - makeSampleBtn
+
+    - name: sendMultiple
+      type: Output
+      measureType: continuous
+      varTitle: "Mult"
+      items: 3
+      clearWith:
+       - makeMultipleBtn
 
 refs: brawstats
       book

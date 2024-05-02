@@ -568,6 +568,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "NHST",
                     "Hits",
                     "Misses",
+                    "2D",
                     "Custom"),
                 default="Basic")
             private$..exploreVar1 <- jmvcore::OptionList$new(
@@ -609,6 +610,10 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "total",
                     "all"),
                 default="all")
+            private$..sendSample <- jmvcore::OptionOutput$new(
+                "sendSample")
+            private$..sendMultiple <- jmvcore::OptionOutput$new(
+                "sendMultiple")
 
             self$.addOption(private$..DVname)
             self$.addOption(private$..DVtype)
@@ -693,6 +698,8 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..exploreVar1)
             self$.addOption(private$..exploreVar2)
             self$.addOption(private$..whichShowExplore)
+            self$.addOption(private$..sendSample)
+            self$.addOption(private$..sendMultiple)
         }),
     active = list(
         DVname = function() private$..DVname$value,
@@ -777,7 +784,9 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         showExploreParam = function() private$..showExploreParam$value,
         exploreVar1 = function() private$..exploreVar1$value,
         exploreVar2 = function() private$..exploreVar2$value,
-        whichShowExplore = function() private$..whichShowExplore$value),
+        whichShowExplore = function() private$..whichShowExplore$value,
+        sendSample = function() private$..sendSample$value,
+        sendMultiple = function() private$..sendMultiple$value),
     private = list(
         ..DVname = NA,
         ..DVtype = NA,
@@ -861,7 +870,9 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..showExploreParam = NA,
         ..exploreVar1 = NA,
         ..exploreVar2 = NA,
-        ..whichShowExplore = NA)
+        ..whichShowExplore = NA,
+        ..sendSample = NA,
+        ..sendMultiple = NA)
 )
 
 BrawSimResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -870,7 +881,9 @@ BrawSimResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     active = list(
         graphPlot = function() private$.items[["graphPlot"]],
         reportPlot = function() private$.items[["reportPlot"]],
-        debug = function() private$.items[["debug"]]),
+        debug = function() private$.items[["debug"]],
+        sendSample = function() private$.items[["sendSample"]],
+        sendMultiple = function() private$.items[["sendMultiple"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -901,7 +914,23 @@ BrawSimResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$add(jmvcore::Preformatted$new(
                 options=options,
                 name="debug",
-                visible=FALSE))}))
+                visible=FALSE))
+            self$add(jmvcore::Output$new(
+                options=options,
+                name="sendSample",
+                measureType="nominal",
+                varTitle="Sample",
+                items=3,
+                clearWith=list(
+                    "makeSampleBtn")))
+            self$add(jmvcore::Output$new(
+                options=options,
+                name="sendMultiple",
+                measureType="continuous",
+                varTitle=" ",
+                items=3,
+                clearWith=list(
+                    "makeMultipleBtn")))}))
 
 BrawSimBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "BrawSimBase",
@@ -1015,6 +1044,8 @@ BrawSimBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$graphPlot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$reportPlot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$debug} \tab \tab \tab \tab \tab a preformatted \cr
+#'   \code{results$sendSample} \tab \tab \tab \tab \tab an output \cr
+#'   \code{results$sendMultiple} \tab \tab \tab \tab \tab an output \cr
 #' }
 #'
 #' @export

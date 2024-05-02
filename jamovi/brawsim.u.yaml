@@ -503,8 +503,8 @@ children:
       - type: LayoutBox
         style: inline
         children:
-        - type: ActionButton
-          name: showHypothesisBtn
+          - type: ActionButton
+            name: showHypothesisBtn
   - type: Label
     label: Sample
     children:
@@ -546,26 +546,26 @@ children:
             style: inline
             margin: none
             children:
-            - type: LayoutBox
-              style: inline
-              margin: none
-              children:
-              - name: numberSamples
-                type: TextBox
-                format: number
-            - type: LayoutBox
-              style: inline
-              children:
-              - type: Label
-                label: ' '
-                margin: small
-                minWidth: 13
-              - type: ComboBox
-                name: multipleVar1
-                enable: '(showMultipleParam:Custom || showMultipleParam:2D)'
-              - type: ComboBox
-                name: multipleVar2
-                enable: '(showMultipleParam:Custom || showMultipleParam:2D)'
+              - type: LayoutBox
+                style: inline
+                margin: none
+                children:
+                  - name: numberSamples
+                    type: TextBox
+                    format: number
+              - type: LayoutBox
+                style: inline
+                children:
+                  - type: Label
+                    label: ' '
+                    margin: small
+                    minWidth: 13
+                  - type: ComboBox
+                    name: multipleVar1
+                    enable: '(showMultipleParam:Custom || showMultipleParam:2D)'
+                  - type: ComboBox
+                    name: multipleVar2
+                    enable: '(showMultipleParam:Custom || showMultipleParam:2D)'
       - type: LayoutBox
         style: inline
         margin: none
@@ -618,16 +618,16 @@ children:
               - type: LayoutBox
                 style: inline
                 children:
-                - type: Label
-                  label: ' '
-                  margin: small
-                  minWidth: 13
-                - type: ComboBox
-                  name: exploreVar1
-                  enable: '(showExploreParam:Custom || showExploreParam:2D)'
-                - type: ComboBox
-                  name: exploreVar2
-                  enable: '(showExploreParam:Custom || showExploreParam:2D)'
+                  - type: Label
+                    label: ' '
+                    margin: small
+                    minWidth: 13
+                  - type: ComboBox
+                    name: exploreVar1
+                    enable: '(showExploreParam:Custom || showExploreParam:2D)'
+                  - type: ComboBox
+                    name: exploreVar2
+                    enable: '(showExploreParam:Custom || showExploreParam:2D)'
       - type: LayoutBox
         style: inline
         margin: none
@@ -641,3 +641,14 @@ children:
           - name: whichShowExplore
             type: ComboBox
             enable: (IV2on)
+  - type: Label
+    label: Send to Jamovi
+    children:
+    - type: LayoutBox
+      style: inline
+      margin: none
+      children:
+      - type: Output
+        name: sendSample
+      - type: Output
+        name: sendMultiple
