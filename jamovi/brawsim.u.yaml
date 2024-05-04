@@ -587,33 +587,33 @@ children:
         children:
           - type: LayoutBox
             style: inline
+            margin: none
             children:
               - type: Label
-                label: ' '
+                label: 'range:'
                 margin: small
                 minWidth: 13
-              - type: CollapseBox
-                label: Options
-                collapsed: true
-                margin: none
-                children:
-                  - type: LayoutBox
-                    style: inline
-                    children:
-                      - type: TextBox
-                        name: exploreMaxN
-                        format: number
-                      - type: CheckBox
-                        name: exploreXLog
+              - type: TextBox
+                name: exploreMinVal
+                format: number
+                enable: '(!typeExplore:Keep && !typeExplore:Method && !typeExplore:Cheating && !typeExplore:Transform && !typeExplore:Usage && !typeExplore:PDF && !typeExplore:IVType && !typeExplore:DVType)'
+              - type: TextBox
+                name: exploreMaxVal
+                format: number
+                enable: '(!typeExplore:Keep && !typeExplore:Method && !typeExplore:Cheating && !typeExplore:Transform && !typeExplore:Usage && !typeExplore:PDF && !typeExplore:IVType && !typeExplore:DVType)'
+              - type: TextBox
+                name: exploreNPoints
+                format: number
+                enable: '(!typeExplore:Keep && !typeExplore:Method && !typeExplore:Cheating && !typeExplore:Transform && !typeExplore:Usage && !typeExplore:PDF && !typeExplore:IVType && !typeExplore:DVType)'
+              - type: CheckBox
+                name: exploreXLog
+                enable: '(!typeExplore:Keep && !typeExplore:Method && !typeExplore:Cheating && !typeExplore:Transform && !typeExplore:Usage && !typeExplore:PDF && !typeExplore:IVType && !typeExplore:DVType)'
           - type: LayoutBox
             style: inline
             margin: none
             children:
               - name: numberExplores
                 type: TextBox
-                format: number
-              - type: TextBox
-                name: exploreNPoints
                 format: number
               - type: LayoutBox
                 style: inline
@@ -636,6 +636,8 @@ children:
             type: ActionButton
           - type: ComboBox
             name: typeExplore
+            events:
+                change: './BrawSim.events::onChange_typeExplore'
           - type: ComboBox
             name: showExploreParam
           - name: whichShowExplore

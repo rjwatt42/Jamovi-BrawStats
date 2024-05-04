@@ -136,7 +136,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       oldX<-braw.def$explore
       explore<-makeExplore(exploreType=typeExplore,
                            exploreNPoints=self$options$exploreNPoints,
-                           max_n=self$options$exploreMaxN,
+                           minVal=self$options$exploreMinVal,maxVal=self$options$exploreMaxVal,
                            xlog=self$options$exploreXLog)
       changedX<- !identical(oldX,explore)
       
@@ -198,8 +198,8 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       braw.env$statusStore<<-statusStore
       
       # main results graphs/reports
-      self$results$debug$setVisible(TRUE)
-      self$results$debug$setContent(c(outputNow1,outputNow2,outputNow3,"=",outputNow,showSampleType))
+      # self$results$debug$setVisible(TRUE)
+      # self$results$debug$setContent(c(outputNow1,outputNow2,outputNow3,"=",outputNow,showSampleType))
       if (!is.null(outputNow))     
         switch(outputNow,
                "Sample"={

@@ -604,8 +604,13 @@ options:
       type: Number
       default: 13
       
-    - name: exploreMaxN
-      title: exploreMaxN
+    - name: exploreMinVal
+      title: min
+      type: Number
+      default: 10
+      
+    - name: exploreMaxVal
+      title: max
       type: Number
       default: 250
 
@@ -629,6 +634,10 @@ options:
       options:
         - name: rIV
           title: EffectSize
+        - name: rIVIV2
+          title: Covariation
+        - name: Heteroscedasticity
+          title: Hscedast
         - name: n
           title: SampleSize
         - name: Method
@@ -653,8 +662,6 @@ options:
           title: Alpha
         - name: Transform
           title: Transform
-        - name: rIVIV2
-          title: Covariation
         - name: IVType
           title: IVType
         - name: DVType
@@ -671,10 +678,7 @@ options:
           title: DVkurtosis
         - name: DVprops
           title: DVprops
-        - name: Heteroscedasticity
-          title: Hscedast
-      default: n
-      
+
     - name: showExploreParam
       title: ' show as:'
       type: List
