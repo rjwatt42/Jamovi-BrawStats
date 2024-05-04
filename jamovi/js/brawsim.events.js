@@ -2,16 +2,6 @@ module.exports =  {
 
     // in here is where the event functions go
 
-// "rIV","rIV2","rIVIV2","rIVIV2DV"
-//                 "n"
-//                 "WithinCorr"
-//                "IVskew","DVskew","CheatingAmount" ,"Heteroscedasticity","Dependence","Outliers","IVRange","DVRange" ,"IVprop", "DVprop" 
-//                "Alpha"
-//                "IVkurtosis","DVkurtosis" 
-//                "Power","Repeats" 
-
-//                 "pNull","k" 
-
     onChange_typeExplore: function(ui) {
       let value = ui.typeExplore.value();
       switch (value) {
@@ -116,8 +106,8 @@ module.exports =  {
         case "Cheating":
         case "Transform":
         case "Keep":
-          ui.exploreMinVal.setValue(0);
-          ui.exploreMaxVal.setValue(0);
+          ui.exploreMinVal.setValue("");
+          ui.exploreMaxVal.setValue("");
           ui.exploreXLog.setValue(false);
           break;
         default: 
@@ -126,6 +116,65 @@ module.exports =  {
           ui.exploreXLog.setValue(false);
           break;
       }
+      switch (value) {
+        case "IVType":
+          ui.exploreNPoints.setValue("5");
+          break;
+        case "DVType":
+          ui.exploreNPoints.setValue("5");
+          break;
+        case "PDF":
+          ui.exploreNPoints.setValue("7");
+          break;
+        case "Method":
+          ui.exploreNPoints.setValue("5");
+          break;
+        case "Usage":
+          ui.exploreNPoints.setValue("2");
+          break;
+        case "Cheating":
+          ui.exploreNPoints.setValue("6");
+          break;
+        case "Transform":
+          ui.exploreNPoints.setValue("3");
+          break;
+        case "Keep":
+          ui.exploreNPoints.setValue("5");
+          break;
+        default: 
+          ui.exploreNPoints.setValue("13");
+          break;
+      }
+    },
 
+    onChange_presetHypothesis: function(ui) {
+      let presetH = ui.presetHypothesis.value();
+      switch(presetH) {
+        case "psych":
+          ui.WorldOn.setValue(true);
+          ui.WorldPDF.setValue("Exp");
+          ui.WorldRZ.setValue("z");
+          ui.Worldk.setValue(0.3);
+          ui.WorldNullP.setValue(0.75);
+          break;
+        case "simple":
+          ui.WorldOn.setValue(false);
+          ui.rIV.setValue(0.3);
+          break;
+      }
+    },
+    onChange_presetDesign: function(ui) {
+      let presetD = ui.presetDesign.value();
+      switch(presetD) {
+        case "psych":
+          ui.SampleSize.setValue(52);
+          ui.SampleSpread.setValue("yes");
+          ui.SampleGamma.setValue(1.56);
+          break;
+        case "simple":
+          ui.SampleSize.setValue(42);
+          ui.SampleSpread.setValue("no");
+          break;
+      }
     }
 };

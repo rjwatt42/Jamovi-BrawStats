@@ -14,7 +14,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
 
       # initialization code 
       if (!exists("braw.env")) {
-        BrawOpts(fontScale = 1.35)
+        BrawOpts(fontScale = 1.35,graphC="white")
         statusStore<-list(lastOutput="System",
                           showSampleType="Sample",
                           showInferParam="Basic",
@@ -134,9 +134,11 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       braw.env$alphaSig<<-self$options$alphaSig
       
       oldX<-braw.def$explore
+      minV<-as.numeric(self$options$exploreMinVal)
+      maxV<-as.numeric(self$options$exploreMaxVal)
       explore<-makeExplore(exploreType=typeExplore,
-                           exploreNPoints=self$options$exploreNPoints,
-                           minVal=self$options$exploreMinVal,maxVal=self$options$exploreMaxVal,
+                           exploreNPoints=as.numeric(self$options$exploreNPoints),
+                           minVal=minV,maxVal=maxV,
                            xlog=self$options$exploreXLog)
       changedX<- !identical(oldX,explore)
       

@@ -6,6 +6,26 @@ version: '1.0.0'
 jas: '1.2'
 
 options:
+    - name: presetHypothesis
+      title: Hypothesis
+      type: List
+      options:
+      - name: custom
+        title: custom
+      - name: psych
+        title: psych
+        
+    - name: presetDesign
+      title: Design
+      type: List
+      options:
+      - name: custom
+        title: custom
+      - name: psych
+        title: psych
+      - name: simple
+        title: simple
+        
     - name: DVname
       title: Name
       type: String
@@ -605,14 +625,14 @@ options:
       default: 13
       
     - name: exploreMinVal
-      title: min
-      type: Number
-      default: 10
+      title: from
+      type: String
+      default: "10"
       
     - name: exploreMaxVal
-      title: max
-      type: Number
-      default: 250
+      title: to
+      type: String
+      default: "250"
 
     - name: exploreXLog
       title: 'log scale'
@@ -622,7 +642,7 @@ options:
     - name: numberExplores
       title: 'no of samples'
       type: Number
-      default: 10
+      default: 50
 
     - name: makeExploreBtn
       title: 'explore'
@@ -678,6 +698,7 @@ options:
           title: DVkurtosis
         - name: DVprops
           title: DVprops
+      default: n
 
     - name: showExploreParam
       title: ' show as:'
