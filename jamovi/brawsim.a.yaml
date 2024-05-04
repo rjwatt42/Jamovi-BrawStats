@@ -13,7 +13,9 @@ options:
       - name: custom
         title: custom
       - name: psych
-        title: psych
+        title: psychology
+      - name: simple
+        title: simple
         
     - name: presetDesign
       title: Design
@@ -22,7 +24,7 @@ options:
       - name: custom
         title: custom
       - name: psych
-        title: psych
+        title: psychology
       - name: simple
         title: simple
         

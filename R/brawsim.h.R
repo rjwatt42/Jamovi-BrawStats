@@ -104,7 +104,8 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 presetHypothesis,
                 options=list(
                     "custom",
-                    "psych"))
+                    "psych",
+                    "simple"))
             private$..presetDesign <- jmvcore::OptionList$new(
                 "presetDesign",
                 presetDesign,
