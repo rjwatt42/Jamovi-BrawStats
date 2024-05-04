@@ -48,7 +48,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             WorldOn = FALSE,
             WorldPDF = "Single",
             WorldRZ = NULL,
-            Worldk = 0.3,
+            WorldLambda = 0.3,
             WorldNullP = 0.5,
             SampleSize = 42,
             SampleSpread = "no",
@@ -297,9 +297,9 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=list(
                     "r",
                     "z"))
-            private$..Worldk <- jmvcore::OptionNumber$new(
-                "Worldk",
-                Worldk,
+            private$..WorldLambda <- jmvcore::OptionNumber$new(
+                "WorldLambda",
+                WorldLambda,
                 default=0.3)
             private$..WorldNullP <- jmvcore::OptionNumber$new(
                 "WorldNullP",
@@ -558,6 +558,10 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "rIV",
                     "rIVIV2",
                     "Heteroscedasticity",
+                    "PDF",
+                    "lambda",
+                    "pNull",
+                    "blank1",
                     "n",
                     "Method",
                     "Usage",
@@ -565,11 +569,15 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "Outliers",
                     "Cheating",
                     "CheatingAmount",
+                    "blank2",
                     "Power",
                     "Keep",
                     "Repeats",
+                    "blank3",
                     "Alpha",
                     "Transform",
+                    "Welch",
+                    "blank4",
                     "IVType",
                     "DVType",
                     "IVskew",
@@ -677,7 +685,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..WorldOn)
             self$.addOption(private$..WorldPDF)
             self$.addOption(private$..WorldRZ)
-            self$.addOption(private$..Worldk)
+            self$.addOption(private$..WorldLambda)
             self$.addOption(private$..WorldNullP)
             self$.addOption(private$..SampleSize)
             self$.addOption(private$..SampleSpread)
@@ -767,7 +775,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         WorldOn = function() private$..WorldOn$value,
         WorldPDF = function() private$..WorldPDF$value,
         WorldRZ = function() private$..WorldRZ$value,
-        Worldk = function() private$..Worldk$value,
+        WorldLambda = function() private$..WorldLambda$value,
         WorldNullP = function() private$..WorldNullP$value,
         SampleSize = function() private$..SampleSize$value,
         SampleSpread = function() private$..SampleSpread$value,
@@ -856,7 +864,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..WorldOn = NA,
         ..WorldPDF = NA,
         ..WorldRZ = NA,
-        ..Worldk = NA,
+        ..WorldLambda = NA,
         ..WorldNullP = NA,
         ..SampleSize = NA,
         ..SampleSpread = NA,
@@ -1027,7 +1035,7 @@ BrawSimBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param WorldOn .
 #' @param WorldPDF .
 #' @param WorldRZ .
-#' @param Worldk .
+#' @param WorldLambda .
 #' @param WorldNullP .
 #' @param SampleSize .
 #' @param SampleSpread .
@@ -1124,7 +1132,7 @@ BrawSim <- function(
     WorldOn = FALSE,
     WorldPDF = "Single",
     WorldRZ,
-    Worldk = 0.3,
+    WorldLambda = 0.3,
     WorldNullP = 0.5,
     SampleSize = 42,
     SampleSpread = "no",
@@ -1216,7 +1224,7 @@ BrawSim <- function(
         WorldOn = WorldOn,
         WorldPDF = WorldPDF,
         WorldRZ = WorldRZ,
-        Worldk = Worldk,
+        WorldLambda = WorldLambda,
         WorldNullP = WorldNullP,
         SampleSize = SampleSize,
         SampleSpread = SampleSpread,

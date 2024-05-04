@@ -333,7 +333,7 @@ children:
                               - type: ComboBox
                                 name: WorldRZ
                               - type: TextBox
-                                name: Worldk
+                                name: WorldLambda
                                 format: number
                               - type: TextBox
                                 name: WorldNullP

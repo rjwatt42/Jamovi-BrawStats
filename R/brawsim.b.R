@@ -98,7 +98,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                          world=makeWorld(worldOn=self$options$WorldOn,
                                          populationPDF=self$options$WorldPDF,
                                          populationRZ = self$options$WorldRZ,
-                                         populationPDFk = self$options$Worldk,
+                                         populationPDFk = self$options$WorldLambda,
                                          populationNullp = self$options$WorldNullP
                          )
       )

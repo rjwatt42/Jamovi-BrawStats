@@ -271,7 +271,7 @@ options:
       - name: z
         title: z
 
-    - name: Worldk
+    - name: WorldLambda
       title: 'lambda'
       type: Number
       default: 0.3
@@ -657,7 +657,15 @@ options:
         - name: rIVIV2
           title: Covariation
         - name: Heteroscedasticity
-          title: Hscedast
+          title: -Hscedast
+        - name: PDF
+          title: -worldPDF
+        - name: lambda
+          title: -worldLambda
+        - name: pNull
+          title: -worldPNull
+        - name: blank1
+          title: " "
         - name: n
           title: SampleSize
         - name: Method
@@ -665,23 +673,31 @@ options:
         - name: Usage
           title: Usage
         - name: Dependence
-          title: Dependence
+          title: -Dependence
         - name: Outliers
-          title: Outliers
+          title: -Outliers
         - name: Cheating
-          title: Cheating
+          title: -Cheating
         - name: CheatingAmount
-          title: CheatAmount
+          title: -CheatAmount
+        - name: blank2
+          title: " "
         - name: Power
           title: ReplPower
         - name: Keep
           title: ReplDecision
         - name: Repeats
           title: ReplAttempts
+        - name: blank3
+          title: " "
         - name: Alpha
           title: Alpha
         - name: Transform
           title: Transform
+        - name: Welch
+          title: EqualVar
+        - name: blank4
+          title: " "
         - name: IVType
           title: IVType
         - name: DVType

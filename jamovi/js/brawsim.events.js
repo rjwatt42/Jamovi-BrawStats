@@ -78,7 +78,7 @@ module.exports =  {
           ui.exploreMaxVal.setValue(1);
           ui.exploreXLog.setValue(false);
           break;
-        case "k":
+        case "lambda":
           ui.exploreMinVal.setValue(0.1);
           ui.exploreMaxVal.setValue(1);
           ui.exploreXLog.setValue(false);
@@ -105,6 +105,7 @@ module.exports =  {
         case "Usage":
         case "Cheating":
         case "Transform":
+        case "Welch":
         case "Keep":
           ui.exploreMinVal.setValue("");
           ui.exploreMaxVal.setValue("");
@@ -141,6 +142,9 @@ module.exports =  {
         case "Keep":
           ui.exploreNPoints.setValue("5");
           break;
+        case "Welch":
+          ui.exploreNPoints.setValue("2");
+          break;
         default: 
           ui.exploreNPoints.setValue("13");
           break;
@@ -154,7 +158,7 @@ module.exports =  {
           ui.WorldOn.setValue(true);
           ui.WorldPDF.setValue("Exp");
           ui.WorldRZ.setValue("z");
-          ui.Worldk.setValue(0.3);
+          ui.WorldLambda.setValue(0.3);
           ui.WorldNullP.setValue(0.75);
           break;
         case "simple":
