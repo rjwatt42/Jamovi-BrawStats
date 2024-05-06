@@ -370,8 +370,13 @@ options:
       
     - name: ReplicationOn
       title: ' '
-      type: Bool
-      default: FALSE
+      type: List
+      options:
+      - name: off
+        title: off
+      - name: on
+        title: on
+      default: off
       
     - name: ReplicationPower
       title: 'power'
@@ -453,6 +458,51 @@ options:
         title: Exp
       default: None
 
+    - name: MetaAnalysisOn
+      title: ' '
+      type: List
+      options:
+      - name: off
+        title: off
+      - name: on
+        title: on
+      default: off
+
+    - name: MetaAnalysisType
+      title: ' '
+      type: List
+      options:
+      - name: random
+        title: random
+      - name: fixed
+        title: fixed
+      default: random
+
+    - name: MetaAnalysisNulls
+      title: 'include nulls'
+      type: List
+      options:
+      - name: yes
+        title: yes
+      - name: no
+        title: no
+      default: yes
+
+    - name: MetaAnalysisNStudies
+      title: 'no of studies'
+      type: Number
+      default: 10
+
+    - name: MetaAnalysisStudiesSig
+      title: ' '
+      type: List
+      options:
+      - name: all
+        title: all
+      - name: sigOnly
+        title: sigOnly
+      default: sigOnly
+      
     - name: showHypothesisBtn
       title: 'show'
       type: Action
@@ -752,14 +802,18 @@ options:
           title: " "
         - name: IVType
           title: IVType
-        - name: DVType
-          title: DVType
         - name: IVskew
           title: IVskew
         - name: IVkurtosis
           title: IVkurtosis
+        - name: IVlevels
+          title: IVlevels
+        - name: IVcats
+          title: IVcats
         - name: IVprops
           title: IVprops
+        - name: DVType
+          title: DVType
         - name: DVskew
           title: DVskew
         - name: DVkurtosis

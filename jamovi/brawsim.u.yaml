@@ -435,9 +435,8 @@ children:
                                     style: inline
                                     margin: none
                                     children:
-                                      - type: CheckBox
+                                      - type: ComboBox
                                         name: ReplicationOn
-                                        margin: none
                                       - type: TextBox
                                         name: ReplicationPower
                                         margin: none
@@ -503,53 +502,86 @@ children:
             style: inline
             margin: none
             children:
-              - type: Label
-                label: ' '
-                verticalAlignment: center
-                margin: small
-                minWidth: 13
-              - type: CollapseBox
-                collapsed: true
-                label: Analysis
+              - type: LayoutBox
+                style: inline
                 margin: none
-                minWidth: 200
                 children:
-                  - type: LayoutBox
-                    style: inline
+                  - type: Label
+                    label: ' '
+                    verticalAlignment: center
+                    margin: small
+                    minWidth: 13
+                  - type: CollapseBox
+                    collapsed: true
+                    label: Analysis
+                    margin: none
+                    minWidth: 200
                     children:
-                      - type: Label
-                        label: ' '
-                        verticalAlignment: center
-                        margin: small
-                        minWidth: 13
                       - type: LayoutBox
                         style: inline
                         margin: none
                         children:
-                          - type: ComboBox
-                            name: equalVar
-                          - type: ComboBox
-                            name: Transform
-                  - type: LayoutBox
-                    style: inline
-                    children:
-                      - type: Label
-                        label: ' '
-                        verticalAlignment: center
-                        margin: small
-                        minWidth: 13
+                          - type: Label
+                            label: ' '
+                            verticalAlignment: center
+                            margin: small
+                            minWidth: 13
+                          - type: CollapseBox
+                            label: MetaAnalysis
+                            collapsed: true
+                            margin: none
+                            children:
+                              - type: LayoutBox
+                                style: inline
+                                margin: none
+                                children:
+                                  - type: Label
+                                    label: ' '
+                                    verticalAlignment: center
+                                    margin: small
+                                    minWidth: 13
+                                  - name: MetaAnalysisOn
+                                    type: ComboBox
+                                  - name: MetaAnalysisType
+                                    type: ComboBox
+                                  - name: MetaAnalysisNulls
+                                    type: ComboBox
+                              - type: LayoutBox
+                                style: inline
+                                margin: none
+                                children:
+                                  - type: Label
+                                    label: ' '
+                                    verticalAlignment: center
+                                    margin: small
+                                    minWidth: 13
+                                  - type: TextBox
+                                    name: MetaAnalysisNStudies
+                                    format: number
+                                  - name: MetaAnalysisStudiesSig
+                                    type: ComboBox
+                      - type: LayoutBox
+                        style: inline
                         children:
-                          - type: TextBox
-                            name: alphaSig
-                            format: number
+                          - type: Label
+                            label: ' '
+                            verticalAlignment: center
+                            margin: small
+                            minWidth: 13
+                          - type: LayoutBox
+                            style: inline
+                            margin: none
+                            children:
+                              - type: ComboBox
+                                name: equalVar
+                              - type: ComboBox
+                                name: Transform
+                              - type: TextBox
+                                name: alphaSig
+                                format: number
           - type: LayoutBox
             style: inline
             children:
-              - type: Label
-                label: ' '
-                verticalAlignment: center
-                margin: small
-                minWidth: 13
               - type: Label
                 label: 'Presets:'
               - type: ComboBox
@@ -579,14 +611,10 @@ children:
             children:
               - type: ComboBox
                 name: singleVar1
-                enable: >-
-                  (showSampleType:Infer && (showInferParam:Custom ||
-                  showInferParam:2D))
+                enable: '(showSampleType:Infer && showInferParam:Custom)'
               - type: ComboBox
                 name: singleVar2
-                enable: >-
-                  (showSampleType:Infer && (showInferParam:Custom ||
-                  showInferParam:2D))
+                enable: '(showSampleType:Infer && showInferParam:Custom)'
               - type: ComboBox
                 name: showInferDimension
                 enable: >-
@@ -629,10 +657,10 @@ children:
                     minWidth: 13
                   - type: ComboBox
                     name: multipleVar1
-                    enable: '(showMultipleParam:Custom || showMultipleParam:2D)'
+                    enable: '(showMultipleParam:Custom)'
                   - type: ComboBox
                     name: multipleVar2
-                    enable: '(showMultipleParam:Custom || showMultipleParam:2D)'
+                    enable: '(showMultipleParam:Custom)'
                   - type: ComboBox
                     name: showMultipleDimension
                     enable: '(showMultipleParam:Custom || showMultipleParam:Basic)'
@@ -647,6 +675,7 @@ children:
           - name: whichShowMultiple
             type: ComboBox
             enable: (IV2on)
+
   - type: Label
     label: Explore
     children:
@@ -710,10 +739,13 @@ children:
                     minWidth: 13
                   - type: ComboBox
                     name: exploreVar1
-                    enable: '(showExploreParam:Custom || showExploreParam:2D)'
+                    enable: '(showExploreParam:Custom)'
                   - type: ComboBox
                     name: exploreVar2
-                    enable: '(showExploreParam:Custom || showExploreParam:2D)'
+                    enable: '(showExploreParam:Custom)'
+                  - type: ComboBox
+                    name: showExploreDimension
+                    enable: '(showExploreParam:Custom)'
       - type: LayoutBox
         style: inline
         margin: none
@@ -740,8 +772,3 @@ children:
             name: sendSample
           - type: Output
             name: sendMultiple
-  - type: LayoutBox
-    margin: large
-    children:
-      - type: ComboBox
-        name: showExploreDimension

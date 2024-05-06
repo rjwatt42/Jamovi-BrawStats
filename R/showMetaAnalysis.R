@@ -160,7 +160,7 @@ drawMeta<-function(metaResult=doMetaAnalysis(),whichMeta="Single",showType="n-k"
     y1<-y1[keep]
     x<-x[keep]
     
-    if (isempty(x)) {return(ggplot()+plotBlankTheme)}
+    if (isempty(x)) {return(ggplot()+braw.env$blankTheme)}
     
     yticks<-c()
     useBest<-yS==best

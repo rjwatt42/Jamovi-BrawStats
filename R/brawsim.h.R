@@ -60,7 +60,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             Outliers = 0,
             Cheating = "None",
             CheatingAttempts = 5,
-            ReplicationOn = FALSE,
+            ReplicationOn = "off",
             ReplicationPower = 0.8,
             ReplicationPrior = "None",
             ReplicationAttempts = 1,
@@ -70,6 +70,11 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             alphaSig = 0.05,
             equalVar = "yes",
             Transform = "None",
+            MetaAnalysisOn = "off",
+            MetaAnalysisType = "random",
+            MetaAnalysisNulls = "yes",
+            MetaAnalysisNStudies = 10,
+            MetaAnalysisStudiesSig = "sigOnly",
             showHypothesisBtn = NULL,
             makeSampleBtn = FALSE,
             numberSamples = 100,
@@ -370,10 +375,13 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "CheatingAttempts",
                 CheatingAttempts,
                 default=5)
-            private$..ReplicationOn <- jmvcore::OptionBool$new(
+            private$..ReplicationOn <- jmvcore::OptionList$new(
                 "ReplicationOn",
                 ReplicationOn,
-                default=FALSE)
+                options=list(
+                    "off",
+                    "on"),
+                default="off")
             private$..ReplicationPower <- jmvcore::OptionNumber$new(
                 "ReplicationPower",
                 ReplicationPower,
@@ -430,6 +438,38 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "Log",
                     "Exp"),
                 default="None")
+            private$..MetaAnalysisOn <- jmvcore::OptionList$new(
+                "MetaAnalysisOn",
+                MetaAnalysisOn,
+                options=list(
+                    "off",
+                    "on"),
+                default="off")
+            private$..MetaAnalysisType <- jmvcore::OptionList$new(
+                "MetaAnalysisType",
+                MetaAnalysisType,
+                options=list(
+                    "random",
+                    "fixed"),
+                default="random")
+            private$..MetaAnalysisNulls <- jmvcore::OptionList$new(
+                "MetaAnalysisNulls",
+                MetaAnalysisNulls,
+                options=list(
+                    "yes",
+                    "no"),
+                default="yes")
+            private$..MetaAnalysisNStudies <- jmvcore::OptionNumber$new(
+                "MetaAnalysisNStudies",
+                MetaAnalysisNStudies,
+                default=10)
+            private$..MetaAnalysisStudiesSig <- jmvcore::OptionList$new(
+                "MetaAnalysisStudiesSig",
+                MetaAnalysisStudiesSig,
+                options=list(
+                    "all",
+                    "sigOnly"),
+                default="sigOnly")
             private$..showHypothesisBtn <- jmvcore::OptionAction$new(
                 "showHypothesisBtn",
                 showHypothesisBtn)
@@ -615,10 +655,12 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "Welch",
                     "blank4",
                     "IVType",
-                    "DVType",
                     "IVskew",
                     "IVkurtosis",
+                    "IVlevels",
+                    "IVcats",
                     "IVprops",
+                    "DVType",
                     "DVskew",
                     "DVkurtosis",
                     "DVprops"),
@@ -755,6 +797,11 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..alphaSig)
             self$.addOption(private$..equalVar)
             self$.addOption(private$..Transform)
+            self$.addOption(private$..MetaAnalysisOn)
+            self$.addOption(private$..MetaAnalysisType)
+            self$.addOption(private$..MetaAnalysisNulls)
+            self$.addOption(private$..MetaAnalysisNStudies)
+            self$.addOption(private$..MetaAnalysisStudiesSig)
             self$.addOption(private$..showHypothesisBtn)
             self$.addOption(private$..makeSampleBtn)
             self$.addOption(private$..numberSamples)
@@ -849,6 +896,11 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         alphaSig = function() private$..alphaSig$value,
         equalVar = function() private$..equalVar$value,
         Transform = function() private$..Transform$value,
+        MetaAnalysisOn = function() private$..MetaAnalysisOn$value,
+        MetaAnalysisType = function() private$..MetaAnalysisType$value,
+        MetaAnalysisNulls = function() private$..MetaAnalysisNulls$value,
+        MetaAnalysisNStudies = function() private$..MetaAnalysisNStudies$value,
+        MetaAnalysisStudiesSig = function() private$..MetaAnalysisStudiesSig$value,
         showHypothesisBtn = function() private$..showHypothesisBtn$value,
         makeSampleBtn = function() private$..makeSampleBtn$value,
         numberSamples = function() private$..numberSamples$value,
@@ -942,6 +994,11 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..alphaSig = NA,
         ..equalVar = NA,
         ..Transform = NA,
+        ..MetaAnalysisOn = NA,
+        ..MetaAnalysisType = NA,
+        ..MetaAnalysisNulls = NA,
+        ..MetaAnalysisNStudies = NA,
+        ..MetaAnalysisStudiesSig = NA,
         ..showHypothesisBtn = NA,
         ..makeSampleBtn = NA,
         ..numberSamples = NA,
@@ -1117,6 +1174,11 @@ BrawSimBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param alphaSig .
 #' @param equalVar .
 #' @param Transform .
+#' @param MetaAnalysisOn .
+#' @param MetaAnalysisType .
+#' @param MetaAnalysisNulls .
+#' @param MetaAnalysisNStudies .
+#' @param MetaAnalysisStudiesSig .
 #' @param showHypothesisBtn .
 #' @param makeSampleBtn .
 #' @param numberSamples .
@@ -1208,7 +1270,7 @@ BrawSim <- function(
     Outliers = 0,
     Cheating = "None",
     CheatingAttempts = 5,
-    ReplicationOn = FALSE,
+    ReplicationOn = "off",
     ReplicationPower = 0.8,
     ReplicationPrior = "None",
     ReplicationAttempts = 1,
@@ -1218,6 +1280,11 @@ BrawSim <- function(
     alphaSig = 0.05,
     equalVar = "yes",
     Transform = "None",
+    MetaAnalysisOn = "off",
+    MetaAnalysisType = "random",
+    MetaAnalysisNulls = "yes",
+    MetaAnalysisNStudies = 10,
+    MetaAnalysisStudiesSig = "sigOnly",
     showHypothesisBtn,
     makeSampleBtn = FALSE,
     numberSamples = 100,
@@ -1314,6 +1381,11 @@ BrawSim <- function(
         alphaSig = alphaSig,
         equalVar = equalVar,
         Transform = Transform,
+        MetaAnalysisOn = MetaAnalysisOn,
+        MetaAnalysisType = MetaAnalysisType,
+        MetaAnalysisNulls = MetaAnalysisNulls,
+        MetaAnalysisNStudies = MetaAnalysisNStudies,
+        MetaAnalysisStudiesSig = MetaAnalysisStudiesSig,
         showHypothesisBtn = showHypothesisBtn,
         makeSampleBtn = makeSampleBtn,
         numberSamples = numberSamples,
