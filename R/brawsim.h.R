@@ -66,6 +66,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             ReplicationAttempts = 1,
             ReplicationDecision = "Cautious",
             ReplicationAlpha = 0.05,
+            ReplicationSign = "yes",
             alphaSig = 0.05,
             equalVar = "yes",
             Transform = "None",
@@ -73,13 +74,15 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             makeSampleBtn = FALSE,
             numberSamples = 100,
             makeMultipleBtn = NULL,
-            singleVar1 = "r",
+            singleVar1 = "rs",
             singleVar2 = "p",
-            multipleVar1 = "r",
+            multipleVar1 = "rs",
             multipleVar2 = "p",
             showSampleType = "Sample",
             showInferParam = "Basic",
+            showInferDimension = "1D",
             showMultipleParam = "Basic",
+            showMultipleDimension = "1D",
             whichShowMultiple = "all",
             exploreNPoints = 13,
             exploreMinVal = "10",
@@ -89,8 +92,9 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             makeExploreBtn = NULL,
             typeExplore = "n",
             showExploreParam = "Basic",
-            exploreVar1 = "r",
+            exploreVar1 = "rs",
             exploreVar2 = "p",
+            showExploreDimension = "1D",
             whichShowExplore = "all", ...) {
 
             super$initialize(
@@ -400,6 +404,13 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "ReplicationAlpha",
                 ReplicationAlpha,
                 default=0.05)
+            private$..ReplicationSign <- jmvcore::OptionList$new(
+                "ReplicationSign",
+                ReplicationSign,
+                options=list(
+                    "yes",
+                    "no"),
+                default="yes")
             private$..alphaSig <- jmvcore::OptionNumber$new(
                 "alphaSig",
                 alphaSig,
@@ -437,28 +448,34 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "singleVar1",
                 singleVar1,
                 options=list(
-                    "r",
-                    "p",
-                    "w",
-                    "n",
+                    "rs",
                     "rp",
+                    "re",
+                    "p",
+                    "n",
+                    "blank1",
+                    "ws",
                     "wp",
-                    "wn",
+                    "nw",
+                    "blank2",
                     "ro",
                     "po",
                     "no"),
-                default="r")
+                default="rs")
             private$..singleVar2 <- jmvcore::OptionList$new(
                 "singleVar2",
                 singleVar2,
                 options=list(
-                    "r",
-                    "p",
-                    "w",
-                    "n",
+                    "rs",
                     "rp",
+                    "re",
+                    "p",
+                    "n",
+                    "blank1",
+                    "ws",
                     "wp",
-                    "wn",
+                    "nw",
+                    "blank2",
                     "ro",
                     "po",
                     "no"),
@@ -467,28 +484,34 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "multipleVar1",
                 multipleVar1,
                 options=list(
-                    "r",
-                    "p",
-                    "w",
-                    "n",
+                    "rs",
                     "rp",
+                    "re",
+                    "p",
+                    "n",
+                    "blank1",
+                    "ws",
                     "wp",
-                    "wn",
+                    "nw",
+                    "blank2",
                     "ro",
                     "po",
                     "no"),
-                default="r")
+                default="rs")
             private$..multipleVar2 <- jmvcore::OptionList$new(
                 "multipleVar2",
                 multipleVar2,
                 options=list(
-                    "r",
-                    "p",
-                    "w",
-                    "n",
+                    "rs",
                     "rp",
+                    "re",
+                    "p",
+                    "n",
+                    "blank1",
+                    "ws",
                     "wp",
-                    "wn",
+                    "nw",
+                    "blank2",
                     "ro",
                     "po",
                     "no"),
@@ -506,9 +529,15 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 showInferParam,
                 options=list(
                     "Basic",
-                    "2D",
                     "Custom"),
                 default="Basic")
+            private$..showInferDimension <- jmvcore::OptionList$new(
+                "showInferDimension",
+                showInferDimension,
+                options=list(
+                    "1D",
+                    "2D"),
+                default="1D")
             private$..showMultipleParam <- jmvcore::OptionList$new(
                 "showMultipleParam",
                 showMultipleParam,
@@ -517,9 +546,15 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "NHST",
                     "Hits",
                     "Misses",
-                    "2D",
                     "Custom"),
                 default="Basic")
+            private$..showMultipleDimension <- jmvcore::OptionList$new(
+                "showMultipleDimension",
+                showMultipleDimension,
+                options=list(
+                    "1D",
+                    "2D"),
+                default="1D")
             private$..whichShowMultiple <- jmvcore::OptionList$new(
                 "whichShowMultiple",
                 whichShowMultiple,
@@ -597,39 +632,51 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "NHST",
                     "Hits",
                     "Misses",
-                    "2D",
                     "Custom"),
                 default="Basic")
             private$..exploreVar1 <- jmvcore::OptionList$new(
                 "exploreVar1",
                 exploreVar1,
                 options=list(
-                    "r",
-                    "p",
-                    "w",
-                    "n",
+                    "rs",
                     "rp",
+                    "re",
+                    "p",
+                    "n",
+                    "blank1",
+                    "ws",
                     "wp",
-                    "wn",
+                    "nw",
+                    "blank2",
                     "ro",
                     "po",
                     "no"),
-                default="r")
+                default="rs")
             private$..exploreVar2 <- jmvcore::OptionList$new(
                 "exploreVar2",
                 exploreVar2,
                 options=list(
-                    "r",
-                    "p",
-                    "w",
-                    "n",
+                    "rs",
                     "rp",
+                    "re",
+                    "p",
+                    "n",
+                    "blank1",
+                    "ws",
                     "wp",
-                    "wn",
+                    "nw",
+                    "blank2",
                     "ro",
                     "po",
                     "no"),
                 default="p")
+            private$..showExploreDimension <- jmvcore::OptionList$new(
+                "showExploreDimension",
+                showExploreDimension,
+                options=list(
+                    "1D",
+                    "2D"),
+                default="1D")
             private$..whichShowExplore <- jmvcore::OptionList$new(
                 "whichShowExplore",
                 whichShowExplore,
@@ -704,6 +751,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..ReplicationAttempts)
             self$.addOption(private$..ReplicationDecision)
             self$.addOption(private$..ReplicationAlpha)
+            self$.addOption(private$..ReplicationSign)
             self$.addOption(private$..alphaSig)
             self$.addOption(private$..equalVar)
             self$.addOption(private$..Transform)
@@ -717,7 +765,9 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..multipleVar2)
             self$.addOption(private$..showSampleType)
             self$.addOption(private$..showInferParam)
+            self$.addOption(private$..showInferDimension)
             self$.addOption(private$..showMultipleParam)
+            self$.addOption(private$..showMultipleDimension)
             self$.addOption(private$..whichShowMultiple)
             self$.addOption(private$..exploreNPoints)
             self$.addOption(private$..exploreMinVal)
@@ -729,6 +779,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..showExploreParam)
             self$.addOption(private$..exploreVar1)
             self$.addOption(private$..exploreVar2)
+            self$.addOption(private$..showExploreDimension)
             self$.addOption(private$..whichShowExplore)
             self$.addOption(private$..sendSample)
             self$.addOption(private$..sendMultiple)
@@ -794,6 +845,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ReplicationAttempts = function() private$..ReplicationAttempts$value,
         ReplicationDecision = function() private$..ReplicationDecision$value,
         ReplicationAlpha = function() private$..ReplicationAlpha$value,
+        ReplicationSign = function() private$..ReplicationSign$value,
         alphaSig = function() private$..alphaSig$value,
         equalVar = function() private$..equalVar$value,
         Transform = function() private$..Transform$value,
@@ -807,7 +859,9 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         multipleVar2 = function() private$..multipleVar2$value,
         showSampleType = function() private$..showSampleType$value,
         showInferParam = function() private$..showInferParam$value,
+        showInferDimension = function() private$..showInferDimension$value,
         showMultipleParam = function() private$..showMultipleParam$value,
+        showMultipleDimension = function() private$..showMultipleDimension$value,
         whichShowMultiple = function() private$..whichShowMultiple$value,
         exploreNPoints = function() private$..exploreNPoints$value,
         exploreMinVal = function() private$..exploreMinVal$value,
@@ -819,6 +873,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         showExploreParam = function() private$..showExploreParam$value,
         exploreVar1 = function() private$..exploreVar1$value,
         exploreVar2 = function() private$..exploreVar2$value,
+        showExploreDimension = function() private$..showExploreDimension$value,
         whichShowExplore = function() private$..whichShowExplore$value,
         sendSample = function() private$..sendSample$value,
         sendMultiple = function() private$..sendMultiple$value),
@@ -883,6 +938,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..ReplicationAttempts = NA,
         ..ReplicationDecision = NA,
         ..ReplicationAlpha = NA,
+        ..ReplicationSign = NA,
         ..alphaSig = NA,
         ..equalVar = NA,
         ..Transform = NA,
@@ -896,7 +952,9 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..multipleVar2 = NA,
         ..showSampleType = NA,
         ..showInferParam = NA,
+        ..showInferDimension = NA,
         ..showMultipleParam = NA,
+        ..showMultipleDimension = NA,
         ..whichShowMultiple = NA,
         ..exploreNPoints = NA,
         ..exploreMinVal = NA,
@@ -908,6 +966,7 @@ BrawSimOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..showExploreParam = NA,
         ..exploreVar1 = NA,
         ..exploreVar2 = NA,
+        ..showExploreDimension = NA,
         ..whichShowExplore = NA,
         ..sendSample = NA,
         ..sendMultiple = NA)
@@ -1054,6 +1113,7 @@ BrawSimBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param ReplicationAttempts .
 #' @param ReplicationDecision .
 #' @param ReplicationAlpha .
+#' @param ReplicationSign .
 #' @param alphaSig .
 #' @param equalVar .
 #' @param Transform .
@@ -1067,7 +1127,9 @@ BrawSimBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param multipleVar2 .
 #' @param showSampleType .
 #' @param showInferParam .
+#' @param showInferDimension .
 #' @param showMultipleParam .
+#' @param showMultipleDimension .
 #' @param whichShowMultiple .
 #' @param exploreNPoints .
 #' @param exploreMinVal .
@@ -1079,6 +1141,7 @@ BrawSimBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param showExploreParam .
 #' @param exploreVar1 .
 #' @param exploreVar2 .
+#' @param showExploreDimension .
 #' @param whichShowExplore .
 #' @return A results object containing:
 #' \tabular{llllll}{
@@ -1151,6 +1214,7 @@ BrawSim <- function(
     ReplicationAttempts = 1,
     ReplicationDecision = "Cautious",
     ReplicationAlpha = 0.05,
+    ReplicationSign = "yes",
     alphaSig = 0.05,
     equalVar = "yes",
     Transform = "None",
@@ -1158,13 +1222,15 @@ BrawSim <- function(
     makeSampleBtn = FALSE,
     numberSamples = 100,
     makeMultipleBtn,
-    singleVar1 = "r",
+    singleVar1 = "rs",
     singleVar2 = "p",
-    multipleVar1 = "r",
+    multipleVar1 = "rs",
     multipleVar2 = "p",
     showSampleType = "Sample",
     showInferParam = "Basic",
+    showInferDimension = "1D",
     showMultipleParam = "Basic",
+    showMultipleDimension = "1D",
     whichShowMultiple = "all",
     exploreNPoints = 13,
     exploreMinVal = "10",
@@ -1174,8 +1240,9 @@ BrawSim <- function(
     makeExploreBtn,
     typeExplore = "n",
     showExploreParam = "Basic",
-    exploreVar1 = "r",
+    exploreVar1 = "rs",
     exploreVar2 = "p",
+    showExploreDimension = "1D",
     whichShowExplore = "all") {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
@@ -1243,6 +1310,7 @@ BrawSim <- function(
         ReplicationAttempts = ReplicationAttempts,
         ReplicationDecision = ReplicationDecision,
         ReplicationAlpha = ReplicationAlpha,
+        ReplicationSign = ReplicationSign,
         alphaSig = alphaSig,
         equalVar = equalVar,
         Transform = Transform,
@@ -1256,7 +1324,9 @@ BrawSim <- function(
         multipleVar2 = multipleVar2,
         showSampleType = showSampleType,
         showInferParam = showInferParam,
+        showInferDimension = showInferDimension,
         showMultipleParam = showMultipleParam,
+        showMultipleDimension = showMultipleDimension,
         whichShowMultiple = whichShowMultiple,
         exploreNPoints = exploreNPoints,
         exploreMinVal = exploreMinVal,
@@ -1268,6 +1338,7 @@ BrawSim <- function(
         showExploreParam = showExploreParam,
         exploreVar1 = exploreVar1,
         exploreVar2 = exploreVar2,
+        showExploreDimension = showExploreDimension,
         whichShowExplore = whichShowExplore)
 
     analysis <- BrawSimClass$new(

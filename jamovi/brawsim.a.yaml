@@ -416,6 +416,16 @@ options:
       type: Number
       default: 0.05
 
+    - name: ReplicationSign
+      title: 'same sign'
+      type: List
+      options:
+      - name: yes
+        title: yes
+      - name: no
+        title: no
+      default: yes
+      
     - name: alphaSig
       title: 'alpha'
       type: Number
@@ -465,46 +475,58 @@ options:
       title: ' show:'
       type: List
       options:
-        - name: r
-          title: r
-        - name: p
-          title: p
-        - name: w
-          title: w
-        - name: n
-          title: n
+        - name: rs
+          title: rs
         - name: rp
           title: rp
+        - name: re
+          title: re
+        - name: p
+          title: p
+        - name: n
+          title: n
+        - name: blank1
+          title: " "
+        - name: ws
+          title: ws
         - name: wp
           title: wp
-        - name: wn
-          title: wn
+        - name: nw
+          title: nw
+        - name: blank2
+          title: " "
         - name: ro
           title: ro
         - name: po
           title: po
         - name: no
           title: no
-      default: r
+      default: rs
 
     - name: singleVar2
       title: ' &'
       type: List
       options:
-        - name: r
-          title: r
-        - name: p
-          title: p
-        - name: w
-          title: w
-        - name: n
-          title: n
+        - name: rs
+          title: rs
         - name: rp
           title: rp
+        - name: re
+          title: re
+        - name: p
+          title: p
+        - name: n
+          title: n
+        - name: blank1
+          title: " "
+        - name: ws
+          title: ws
         - name: wp
           title: wp
-        - name: wn
-          title: wn
+        - name: nw
+          title: nw
+        - name: blank2
+          title: " "
         - name: ro
           title: ro
         - name: po
@@ -517,46 +539,58 @@ options:
       title: ' show:'
       type: List
       options:
-        - name: r
-          title: r
-        - name: p
-          title: p
-        - name: w
-          title: w
-        - name: n
-          title: n
+        - name: rs
+          title: rs
         - name: rp
           title: rp
+        - name: re
+          title: re
+        - name: p
+          title: p
+        - name: n
+          title: n
+        - name: blank1
+          title: " "
+        - name: ws
+          title: ws
         - name: wp
           title: wp
-        - name: wn
-          title: wn
+        - name: nw
+          title: nw
+        - name: blank2
+          title: " "
         - name: ro
           title: ro
         - name: po
           title: po
         - name: no
           title: no
-      default: r
+      default: rs
 
     - name: multipleVar2
       title: ' &'
       type: List
       options:
-        - name: r
-          title: r
-        - name: p
-          title: p
-        - name: w
-          title: w
-        - name: n
-          title: n
+        - name: rs
+          title: rs
         - name: rp
           title: rp
+        - name: re
+          title: re
+        - name: p
+          title: p
+        - name: n
+          title: n
+        - name: blank1
+          title: " "
+        - name: ws
+          title: ws
         - name: wp
           title: wp
-        - name: wn
-          title: wn
+        - name: nw
+          title: nw
+        - name: blank2
+          title: " "
         - name: ro
           title: ro
         - name: po
@@ -583,12 +617,20 @@ options:
       options:
         - name: Basic
           title: Basic
-        - name: 2D
-          title: 2D
         - name: Custom
           title: Custom
       default: Basic
-      
+                  
+    - name: showInferDimension
+      title: ''
+      type: List
+      options:
+        - name: 1D
+          title: 1D
+        - name: 2D
+          title: 2D
+      default: 1D
+
     - name: showMultipleParam
       title: ' show as:'
       type: List
@@ -601,11 +643,19 @@ options:
           title: Hits
         - name: Misses
           title: Misses
-        - name: 2D
-          title: 2D
         - name: Custom
           title: Custom
       default: Basic
+            
+    - name: showMultipleDimension
+      title: ''
+      type: List
+      options:
+        - name: 1D
+          title: 1D
+        - name: 2D
+          title: 2D
+      default: 1D
             
     - name: whichShowMultiple
       title: " "
@@ -732,8 +782,6 @@ options:
           title: Hits
         - name: Misses
           title: Misses
-        - name: 2D
-          title: 2D
         - name: Custom
           title: Custom
       default: Basic
@@ -743,46 +791,58 @@ options:
       title: ' show:'
       type: List
       options:
-        - name: r
-          title: r
-        - name: p
-          title: p
-        - name: w
-          title: w
-        - name: n
-          title: n
+        - name: rs
+          title: rs
         - name: rp
           title: rp
+        - name: re
+          title: re
+        - name: p
+          title: p
+        - name: n
+          title: n
+        - name: blank1
+          title: " "
+        - name: ws
+          title: ws
         - name: wp
           title: wp
-        - name: wn
-          title: wn
+        - name: nw
+          title: nw
+        - name: blank2
+          title: " "
         - name: ro
           title: ro
         - name: po
           title: po
         - name: no
           title: no
-      default: r
+      default: rs
 
     - name: exploreVar2
       title: ' &'
       type: List
       options:
-        - name: r
-          title: r
-        - name: p
-          title: p
-        - name: w
-          title: w
-        - name: n
-          title: n
+        - name: rs
+          title: rs
         - name: rp
           title: rp
+        - name: re
+          title: re
+        - name: p
+          title: p
+        - name: n
+          title: n
+        - name: blank1
+          title: " "
+        - name: ws
+          title: ws
         - name: wp
           title: wp
-        - name: wn
-          title: wn
+        - name: nw
+          title: nw
+        - name: blank2
+          title: " "
         - name: ro
           title: ro
         - name: po
@@ -790,6 +850,16 @@ options:
         - name: no
           title: no
       default: p
+                  
+    - name: showExploreDimension
+      title: ''
+      type: List
+      options:
+        - name: 1D
+          title: 1D
+        - name: 2D
+          title: 2D
+      default: 1D
       
     - name: whichShowExplore
       title: " "

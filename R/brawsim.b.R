@@ -29,25 +29,20 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       makeSampleNow<-self$options$makeSampleBtn
       showSampleType<-self$options$showSampleType
       showInferParam<-self$options$showInferParam
-      if (showInferParam=="2D") {
-        dimensionInfer<-"2D"
-        showInferParam<-paste0(self$options$singleVar1,";",self$options$singleVar2)
-      } else dimensionInfer<-"1D"
+      showInferDimension<-self$options$showInferDimension
       if (showInferParam=="Custom") {
         showInferParam<-paste0(self$options$singleVar1,";",self$options$singleVar2)
       } 
       
       makeMultipleNow<-self$options$makeMultipleBtn
       showMultipleParam<-self$options$showMultipleParam
-      if (showMultipleParam=="2D") {
-        dimensionMultiple<-"2D"
-        showMultipleParam<-paste0(self$options$multipleVar1,";",self$options$multipleVar2)
-      } else dimensionMultiple<-"1D"
+      showMultipleDimension<-self$options$showMultipleDimension
       if (showMultipleParam=="Custom") {
         showMultipleParam<-paste0(self$options$multipleVar1,";",self$options$multipleVar2)
       } 
       whichShowMultipleOut<-self$options$whichShowMultiple
       
+      showExploreDimension<-self$options$showExploreDimension
       showExploreParam<-self$options$showExploreParam
       if (showExploreParam=="Custom") {
         showExploreParam<-paste0(self$options$exploreVar1,";",self$options$exploreVar2)
@@ -120,6 +115,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                                                      Power=self$options$ReplicationPower,
                                                      Repeats=self$options$ReplicationAttempts,
                                                      Keep=self$options$ReplicationDecision,
+                                                     forceSigOriginal=FALSE,forceSign=(self$options$ReplicationSign=="yes"),
                                                      RepAlpha=self$options$ReplicationAlpha,
                                                      PowerPrior=self$options$ReplicationPrior
                                                      )
@@ -201,7 +197,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       
       # main results graphs/reports
       # self$results$debug$setVisible(TRUE)
-      # self$results$debug$setContent(c(outputNow1,outputNow2,outputNow3,"=",outputNow,showSampleType))
+      # self$results$debug$setContent(c(showMultipleParam))
       if (!is.null(outputNow))     
         switch(outputNow,
                "Sample"={
@@ -213,19 +209,20 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                  self$results$reportPlot$setState(outputNow)
                },
                "Infer"={
-                 self$results$graphPlot$setState(c(outputNow,showInferParam,dimensionInfer))
+                 self$results$graphPlot$setState(c(outputNow,showInferParam,showInferDimension))
                  self$results$reportPlot$setState(c(outputNow,showInferParam))
                },
                "Multiple"={
-                 self$results$graphPlot$setState(c(outputNow,showMultipleParam,dimensionMultiple,whichShowMultipleOut))
+                 self$results$graphPlot$setState(c(outputNow,showMultipleParam,showMultipleDimension,whichShowMultipleOut))
                  self$results$reportPlot$setState(c(outputNow,showMultipleParam))
                },
                "Explore"={
-                 self$results$graphPlot$setState(c(outputNow,showExploreParam,whichShowExploreOut))
+                 self$results$graphPlot$setState(c(outputNow,showExploreParam,showExploreDimension,whichShowExploreOut))
                  # self$results$reportPlot$setState(c(outputNow,showExploreParam))
                },
                {
                  self$results$graphPlot$setState(outputNow)
+                 self$results$reportPlot$setState(outputNow)
                }
         )
       
@@ -280,7 +277,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                "Describe"  =outputGraph<-showDescription(),
                "Infer"     =outputGraph<-showInference(showType=image$state[2],dimension=image$state[3]),
                "Multiple"  =outputGraph<-showExpected(showType=image$state[2],dimension=image$state[3],effectType=image$state[4]),
-               "Explore"   =outputGraph<-showExplore(showType=image$state[2],effectType=image$state[3])
+               "Explore"   =outputGraph<-showExplore(showType=image$state[2],dimension=image$state[3],effectType=image$state[4])
         )
         print(outputGraph)
         return(TRUE)
@@ -293,6 +290,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       outputGraph <- image$state[1]
       if (!is.null(outputGraph)) {
         switch(outputGraph,
+               "System"    =outputGraph<-reportTerms(),
                "Sample"    =outputGraph<-reportSample(),
                "Describe"  =outputGraph<-reportDescription(),
                "Infer"     =outputGraph<-reportInference(),

@@ -7,48 +7,123 @@ children:
   - type: Label
     label: Plan
     children:
-    - type: CollapseBox
-      collapsed: true
-      label: Plan
-      margin: none
-      minWidth: 450
-      children:
-      - type: LayoutBox
-        style: inline
+      - type: CollapseBox
+        collapsed: true
+        label: Plan
         margin: none
+        minWidth: 450
         children:
-          - type: Label
-            label: ' '
-            verticalAlignment: center
-            margin: small
-            minWidth: 13
-          - type: CollapseBox
-            collapsed: true
-            label: Hypothesis
+          - type: LayoutBox
+            style: inline
             margin: none
-            minWidth: 200
             children:
-              - type: LayoutBox
-                style: inline
+              - type: Label
+                label: ' '
+                verticalAlignment: center
+                margin: small
+                minWidth: 13
+              - type: CollapseBox
+                collapsed: true
+                label: Hypothesis
+                margin: none
+                minWidth: 200
                 children:
-                  - type: Label
-                    label: ' '
-                    verticalAlignment: center
-                    margin: small
-                    minWidth: 13
                   - type: LayoutBox
-                    style: list
-                    margin: none
+                    style: inline
                     children:
-                      - type: CollapseBox
-                        collapsed: true
-                        label: Variables
+                      - type: Label
+                        label: ' '
+                        verticalAlignment: center
+                        margin: small
+                        minWidth: 13
+                      - type: LayoutBox
+                        style: list
                         margin: none
                         children:
-                          - type: LayoutBox
-                            style: inline
+                          - type: CollapseBox
+                            collapsed: true
+                            label: Variables
                             margin: none
                             children:
+                              - type: LayoutBox
+                                style: inline
+                                margin: none
+                                children:
+                                  - type: LayoutBox
+                                    style: inline
+                                    margin: none
+                                    children:
+                                      - type: Label
+                                        label: ' '
+                                        verticalAlignment: center
+                                        margin: small
+                                        minWidth: 13
+                                      - type: CollapseBox
+                                        collapsed: true
+                                        label: 'IV:'
+                                        margin: normal
+                                        children:
+                                          - type: LayoutBox
+                                            style: inline
+                                            margin: none
+                                            children:
+                                              - type: TextBox
+                                                name: IVname
+                                                format: string
+                                                margin: normal
+                                              - type: ComboBox
+                                                name: IVtype
+                                                margin: none
+                                          - type: CollapseBox
+                                            label: Parameters
+                                            collapsed: true
+                                            style: list
+                                            margin: none
+                                            children:
+                                              - type: LayoutBox
+                                                style: inline
+                                                margin: none
+                                                children:
+                                                  - type: TextBox
+                                                    name: IVmu
+                                                    format: number
+                                                    enable: '(IVtype:Interval)'
+                                                  - type: TextBox
+                                                    name: IVsd
+                                                    format: number
+                                                    enable: '(IVtype:Interval)'
+                                                  - type: TextBox
+                                                    name: IVskew
+                                                    format: number
+                                                    enable: '(IVtype:Interval)'
+                                                  - type: TextBox
+                                                    name: IVkurt
+                                                    format: number
+                                                    enable: '(IVtype:Interval)'
+                                              - type: LayoutBox
+                                                style: inline
+                                                margin: none
+                                                children:
+                                                  - type: TextBox
+                                                    name: IVnlevs
+                                                    format: number
+                                                    enable: '(IVtype:Ordinal)'
+                                                  - type: TextBox
+                                                    name: IViqr
+                                                    format: number
+                                                    enable: '(IVtype:Ordinal)'
+                                              - type: LayoutBox
+                                                style: inline
+                                                margin: none
+                                                children:
+                                                  - type: TextBox
+                                                    name: IVncats
+                                                    format: number
+                                                    enable: '(IVtype:Categorical)'
+                                                  - type: TextBox
+                                                    name: IVprops
+                                                    format: string
+                                                    enable: '(IVtype:Categorical)'
                               - type: LayoutBox
                                 style: inline
                                 margin: none
@@ -60,20 +135,25 @@ children:
                                     minWidth: 13
                                   - type: CollapseBox
                                     collapsed: true
-                                    label: 'IV:'
+                                    label: 'IV2:'
                                     margin: normal
                                     children:
+                                      - type: CheckBox
+                                        name: IV2on
+                                        margin: none
                                       - type: LayoutBox
                                         style: inline
                                         margin: none
                                         children:
                                           - type: TextBox
-                                            name: IVname
+                                            name: IV2name
                                             format: string
                                             margin: normal
+                                            enable: (IV2on)
                                           - type: ComboBox
-                                            name: IVtype
+                                            name: IV2type
                                             margin: none
+                                            enable: (IV2on)
                                       - type: CollapseBox
                                         label: Parameters
                                         collapsed: true
@@ -85,483 +165,406 @@ children:
                                             margin: none
                                             children:
                                               - type: TextBox
-                                                name: IVmu
+                                                name: IV2mu
                                                 format: number
-                                                enable: '(IVtype:Interval)'
+                                                enable: '(IV2on && IV2type:Interval)'
                                               - type: TextBox
-                                                name: IVsd
+                                                name: IV2sd
                                                 format: number
-                                                enable: '(IVtype:Interval)'
+                                                enable: '(IV2on && IV2type:Interval)'
                                               - type: TextBox
-                                                name: IVskew
+                                                name: IV2skew
                                                 format: number
-                                                enable: '(IVtype:Interval)'
+                                                enable: '(IV2on && IV2type:Interval)'
                                               - type: TextBox
-                                                name: IVkurt
+                                                name: IV2kurt
                                                 format: number
-                                                enable: '(IVtype:Interval)'
+                                                enable: '(IV2on && IV2type:Interval)'
                                           - type: LayoutBox
                                             style: inline
                                             margin: none
                                             children:
                                               - type: TextBox
-                                                name: IVnlevs
+                                                name: IV2nlevs
                                                 format: number
-                                                enable: '(IVtype:Ordinal)'
+                                                enable: '(IV2on && IV2type:Ordinal)'
                                               - type: TextBox
-                                                name: IViqr
+                                                name: IV2iqr
                                                 format: number
-                                                enable: '(IVtype:Ordinal)'
+                                                enable: '(IV2on && IV2type:Ordinal)'
                                           - type: LayoutBox
                                             style: inline
                                             margin: none
                                             children:
                                               - type: TextBox
-                                                name: IVncats
+                                                name: IV2ncats
                                                 format: number
-                                                enable: '(IVtype:Categorical)'
+                                                enable: '(IV2on && IV2type:Categorical)'
                                               - type: TextBox
-                                                name: IVprops
+                                                name: IV2props
                                                 format: string
-                                                enable: '(IVtype:Categorical)'
-                          - type: LayoutBox
-                            style: inline
+                                                enable: '(IV2on && IV2type:Categorical)'
+                              - type: LayoutBox
+                                style: inline
+                                margin: none
+                                children:
+                                  - type: LayoutBox
+                                    style: inline
+                                    margin: none
+                                    children:
+                                      - type: Label
+                                        label: ' '
+                                        verticalAlignment: center
+                                        margin: small
+                                        minWidth: 13
+                                      - type: CollapseBox
+                                        collapsed: true
+                                        label: 'DV:'
+                                        margin: normal
+                                        children:
+                                          - type: LayoutBox
+                                            style: inline
+                                            margin: none
+                                            children:
+                                              - type: LayoutBox
+                                                style: inline
+                                                margin: none
+                                                children:
+                                                  - type: TextBox
+                                                    name: DVname
+                                                    format: string
+                                                    margin: normal
+                                                  - type: ComboBox
+                                                    name: DVtype
+                                                    margin: none
+                                          - type: CollapseBox
+                                            label: Parameters
+                                            collapsed: true
+                                            style: list
+                                            margin: none
+                                            children:
+                                              - type: LayoutBox
+                                                style: inline
+                                                margin: none
+                                                children:
+                                                  - type: TextBox
+                                                    name: DVmu
+                                                    format: number
+                                                    enable: '(DVtype:Interval)'
+                                                  - type: TextBox
+                                                    name: DVsd
+                                                    format: number
+                                                    enable: '(DVtype:Interval)'
+                                                  - type: TextBox
+                                                    name: DVskew
+                                                    format: number
+                                                    enable: '(DVtype:Interval)'
+                                                  - type: TextBox
+                                                    name: DVkurt
+                                                    format: number
+                                                    enable: '(DVtype:Interval)'
+                                              - type: LayoutBox
+                                                style: inline
+                                                margin: none
+                                                children:
+                                                  - type: TextBox
+                                                    name: DVnlevs
+                                                    format: number
+                                                    enable: '(DVtype:Ordinal)'
+                                                  - type: TextBox
+                                                    name: DViqr
+                                                    format: number
+                                                    enable: '(DVtype:Ordinal)'
+                                              - type: LayoutBox
+                                                style: inline
+                                                margin: none
+                                                children:
+                                                  - type: TextBox
+                                                    name: DVncats
+                                                    format: number
+                                                    enable: '(DVtype:Categorical)'
+                                                  - type: TextBox
+                                                    name: DVprops
+                                                    format: string
+                                                    enable: '(DVtype:Categorical)'
+                          - type: CollapseBox
+                            collapsed: true
+                            label: Effects
                             margin: none
                             children:
+                              - type: LayoutBox
+                                margin: none
+                                children:
+                                  - type: TextBox
+                                    name: EffectSize1
+                                    margin: none
+                                    format: number
+                                  - type: TextBox
+                                    name: EffectSize2
+                                    margin: none
+                                    format: number
+                                    enable: (IV2on)
+                                  - type: TextBox
+                                    name: EffectSize3
+                                    margin: none
+                                    format: number
+                                    enable: (IV2on)
+                                  - type: TextBox
+                                    name: EffectSize12
+                                    margin: none
+                                    format: number
+                                    enable: (IV2on)
                               - type: Label
                                 label: ' '
-                                verticalAlignment: center
                                 margin: small
-                                minWidth: 13
-                              - type: CollapseBox
-                                collapsed: true
-                                label: 'IV2:'
-                                margin: normal
+                          - type: CollapseBox
+                            collapsed: true
+                            label: World
+                            margin: none
+                            children:
+                              - type: LayoutBox
+                                style: inline
+                                margin: none
                                 children:
                                   - type: CheckBox
-                                    name: IV2on
+                                    name: WorldOn
+                                  - type: ComboBox
+                                    name: WorldPDF
+                                  - type: ComboBox
+                                    name: WorldRZ
+                                  - type: TextBox
+                                    name: WorldLambda
+                                    format: number
+                                  - type: TextBox
+                                    name: WorldNullP
+                                    format: number
+                          - type: CollapseBox
+                            collapsed: true
+                            label: Anomalies
+                            margin: none
+                            children:
+                              - type: LayoutBox
+                                style: inline
+                                margin: none
+                                children:
+                                  - type: ComboBox
+                                    name: Residuals
                                     margin: none
+                                  - type: TextBox
+                                    name: Heteroscedasticity
+                                    margin: none
+                                    format: number
+          - type: LayoutBox
+            style: inline
+            margin: none
+            children:
+              - type: Label
+                label: ' '
+                verticalAlignment: center
+                margin: small
+                minWidth: 13
+              - type: CollapseBox
+                collapsed: true
+                label: Design
+                margin: none
+                minWidth: 200
+                children:
+                  - type: LayoutBox
+                    style: inline
+                    children:
+                      - type: Label
+                        label: ' '
+                        verticalAlignment: center
+                        margin: small
+                        minWidth: 13
+                      - type: LayoutBox
+                        style: list
+                        margin: none
+                        children:
+                          - type: CollapseBox
+                            label: Sampling
+                            collapsed: true
+                            margin: none
+                            children:
+                              - type: LayoutBox
+                                style: list
+                                margin: none
+                                children:
                                   - type: LayoutBox
                                     style: inline
                                     margin: none
                                     children:
                                       - type: TextBox
-                                        name: IV2name
-                                        format: string
-                                        margin: normal
-                                        enable: (IV2on)
+                                        name: SampleSize
+                                        margin: none
+                                        format: number
                                       - type: ComboBox
-                                        name: IV2type
+                                        name: SampleSpread
                                         margin: none
-                                        enable: (IV2on)
-                                  - type: CollapseBox
-                                    label: Parameters
-                                    collapsed: true
-                                    style: list
+                                      - type: TextBox
+                                        name: SampleGamma
+                                        margin: none
+                                        format: number
+                                  - type: LayoutBox
+                                    style: inline
                                     margin: none
                                     children:
-                                      - type: LayoutBox
-                                        style: inline
+                                      - type: ComboBox
+                                        name: SampleMethod
                                         margin: none
-                                        children:
-                                          - type: TextBox
-                                            name: IV2mu
-                                            format: number
-                                            enable: '(IV2on && IV2type:Interval)'
-                                          - type: TextBox
-                                            name: IV2sd
-                                            format: number
-                                            enable: '(IV2on && IV2type:Interval)'
-                                          - type: TextBox
-                                            name: IV2skew
-                                            format: number
-                                            enable: '(IV2on && IV2type:Interval)'
-                                          - type: TextBox
-                                            name: IV2kurt
-                                            format: number
-                                            enable: '(IV2on && IV2type:Interval)'
-                                      - type: LayoutBox
-                                        style: inline
-                                        margin: none
-                                        children:
-                                          - type: TextBox
-                                            name: IV2nlevs
-                                            format: number
-                                            enable: '(IV2on && IV2type:Ordinal)'
-                                          - type: TextBox
-                                            name: IV2iqr
-                                            format: number
-                                            enable: '(IV2on && IV2type:Ordinal)'
-                                      - type: LayoutBox
-                                        style: inline
-                                        margin: none
-                                        children:
-                                          - type: TextBox
-                                            name: IV2ncats
-                                            format: number
-                                            enable: '(IV2on && IV2type:Categorical)'
-                                          - type: TextBox
-                                            name: IV2props
-                                            format: string
-                                            enable: '(IV2on && IV2type:Categorical)'
-                          - type: LayoutBox
-                            style: inline
-                            margin: none
-                            children:
-                              - type: LayoutBox
-                                style: inline
-                                margin: none
-                                children:
-                                  - type: Label
-                                    label: ' '
-                                    verticalAlignment: center
-                                    margin: small
-                                    minWidth: 13
-                                  - type: CollapseBox
-                                    collapsed: true
-                                    label: 'DV:'
-                                    margin: normal
+                                  - type: LayoutBox
+                                    style: inline
+                                    margin: none
                                     children:
-                                      - type: LayoutBox
-                                        style: inline
+                                      - type: ComboBox
+                                        name: SampleUsage1
                                         margin: none
-                                        children:
-                                          - type: LayoutBox
-                                            style: inline
-                                            margin: none
-                                            children:
-                                              - type: TextBox
-                                                name: DVname
-                                                format: string
-                                                margin: normal
-                                              - type: ComboBox
-                                                name: DVtype
-                                                margin: none
-                                      - type: CollapseBox
-                                        label: Parameters
-                                        collapsed: true
-                                        style: list
+                                      - type: ComboBox
+                                        name: SampleUsage2
                                         margin: none
-                                        children:
-                                          - type: LayoutBox
-                                            style: inline
-                                            margin: none
-                                            children:
-                                              - type: TextBox
-                                                name: DVmu
-                                                format: number
-                                                enable: '(DVtype:Interval)'
-                                              - type: TextBox
-                                                name: DVsd
-                                                format: number
-                                                enable: '(DVtype:Interval)'
-                                              - type: TextBox
-                                                name: DVskew
-                                                format: number
-                                                enable: '(DVtype:Interval)'
-                                              - type: TextBox
-                                                name: DVkurt
-                                                format: number
-                                                enable: '(DVtype:Interval)'
-                                          - type: LayoutBox
-                                            style: inline
-                                            margin: none
-                                            children:
-                                              - type: TextBox
-                                                name: DVnlevs
-                                                format: number
-                                                enable: '(DVtype:Ordinal)'
-                                              - type: TextBox
-                                                name: DViqr
-                                                format: number
-                                                enable: '(DVtype:Ordinal)'
-                                          - type: LayoutBox
-                                            style: inline
-                                            margin: none
-                                            children:
-                                              - type: TextBox
-                                                name: DVncats
-                                                format: number
-                                                enable: '(DVtype:Categorical)'
-                                              - type: TextBox
-                                                name: DVprops
-                                                format: string
-                                                enable: '(DVtype:Categorical)'
-                      - type: CollapseBox
-                        collapsed: true
-                        label: Effects
-                        margin: none
-                        children:
-                          - type: LayoutBox
+                          - type: CollapseBox
+                            label: Replication
+                            collapsed: true
                             margin: none
                             children:
-                              - type: TextBox
-                                name: EffectSize1
+                              - type: LayoutBox
+                                style: list
                                 margin: none
-                                format: number
-                              - type: TextBox
-                                name: EffectSize2
-                                margin: none
-                                format: number
-                                enable: (IV2on)
-                              - type: TextBox
-                                name: EffectSize3
-                                margin: none
-                                format: number
-                                enable: (IV2on)
-                              - type: TextBox
-                                name: EffectSize12
-                                margin: none
-                                format: number
-                                enable: (IV2on)
-                          - type: Label
-                            label: ' '
-                            margin: small
-                      - type: CollapseBox
-                        collapsed: true
-                        label: World
-                        margin: none
-                        children:
-                          - type: LayoutBox
-                            style: inline
+                                children:
+                                  - type: LayoutBox
+                                    style: inline
+                                    margin: none
+                                    children:
+                                      - type: CheckBox
+                                        name: ReplicationOn
+                                        margin: none
+                                      - type: TextBox
+                                        name: ReplicationPower
+                                        margin: none
+                                        format: number
+                                      - type: TextBox
+                                        name: ReplicationAttempts
+                                        margin: none
+                                        format: number
+                                      - type: ComboBox
+                                        name: ReplicationDecision
+                                        margin: none
+                                  - type: LayoutBox
+                                    style: inline
+                                    margin: none
+                                    children:
+                                      - type: ComboBox
+                                        name: ReplicationSign
+                                        margin: none
+                                      - type: TextBox
+                                        name: ReplicationAlpha
+                                        margin: none
+                                        format: number
+                                      - type: ComboBox
+                                        name: ReplicationPrior
+                                        margin: none
+                          - type: CollapseBox
+                            label: Anomalies
+                            collapsed: true
                             margin: none
                             children:
-                              - type: CheckBox
-                                name: WorldOn
-                              - type: ComboBox
-                                name: WorldPDF
-                              - type: ComboBox
-                                name: WorldRZ
-                              - type: TextBox
-                                name: WorldLambda
-                                format: number
-                              - type: TextBox
-                                name: WorldNullP
-                                format: number
-                      - type: CollapseBox
-                        collapsed: true
-                        label: Anomalies
-                        margin: none
-                        children:
-                          - type: LayoutBox
-                            style: inline
-                            margin: none
-                            children:
-                              - type: ComboBox
-                                name: Residuals
+                              - type: LayoutBox
+                                style: list
                                 margin: none
-                              - type: TextBox
-                                name: Heteroscedasticity
+                                children:
+                                  - type: LayoutBox
+                                    style: inline
+                                    margin: none
+                                    children:
+                                      - type: TextBox
+                                        name: Dependence
+                                        margin: none
+                                        format: number
+                                      - type: TextBox
+                                        name: Outliers
+                                        margin: none
+                                        format: number
+                              - type: LayoutBox
+                                style: list
                                 margin: none
-                                format: number
-      - type: LayoutBox
-        style: inline
-        margin: none
-        children:
-          - type: Label
-            label: ' '
-            verticalAlignment: center
-            margin: small
-            minWidth: 13
-          - type: CollapseBox
-            collapsed: true
-            label: Design
+                                children:
+                                  - type: LayoutBox
+                                    style: inline
+                                    margin: none
+                                    children:
+                                      - type: ComboBox
+                                        name: Cheating
+                                        margin: none
+                                      - type: TextBox
+                                        name: CheatingAttempts
+                                        margin: none
+                                        format: number
+          - type: LayoutBox
+            style: inline
             margin: none
-            minWidth: 200
             children:
-              - type: LayoutBox
-                style: inline
-                children:
-                  - type: Label
-                    label: ' '
-                    verticalAlignment: center
-                    margin: small
-                    minWidth: 13
-                  - type: LayoutBox
-                    style: list
-                    margin: none
-                    children:
-                      - type: CollapseBox
-                        label: Sampling
-                        collapsed: true
-                        margin: none
-                        children:
-                          - type: LayoutBox
-                            style: list
-                            margin: none
-                            children:
-                              - type: LayoutBox
-                                style: inline
-                                margin: none
-                                children:
-                                  - type: TextBox
-                                    name: SampleSize
-                                    margin: none
-                                    format: number
-                                  - type: ComboBox
-                                    name: SampleSpread
-                                    margin: none
-                                  - type: TextBox
-                                    name: SampleGamma
-                                    margin: none
-                                    format: number
-                              - type: LayoutBox
-                                style: inline
-                                margin: none
-                                children:
-                                  - type: ComboBox
-                                    name: SampleMethod
-                                    margin: none
-                              - type: LayoutBox
-                                style: inline
-                                margin: none
-                                children:
-                                  - type: ComboBox
-                                    name: SampleUsage1
-                                    margin: none
-                                  - type: ComboBox
-                                    name: SampleUsage2
-                                    margin: none
-                      - type: CollapseBox
-                        label: Replication
-                        collapsed: true
-                        margin: none
-                        children:
-                          - type: LayoutBox
-                            style: list
-                            margin: none
-                            children:
-                              - type: LayoutBox
-                                style: inline
-                                margin: none
-                                children:
-                                  - type: CheckBox
-                                    name: ReplicationOn
-                                    margin: none
-                                  - type: TextBox
-                                    name: ReplicationPower
-                                    margin: none
-                                    format: number
-                                  - type: TextBox
-                                    name: ReplicationAttempts
-                                    margin: none
-                                    format: number
-                                  - type: ComboBox
-                                    name: ReplicationDecision
-                                    margin: none
-                              - type: LayoutBox
-                                style: inline
-                                margin: none
-                                children:
-                                  - type: TextBox
-                                    name: ReplicationAlpha
-                                    margin: none
-                                    format: number
-                                  - type: ComboBox
-                                    name: ReplicationPrior
-                                    margin: none
-                      - type: CollapseBox
-                        label: Anomalies
-                        collapsed: true
-                        margin: none
-                        children:
-                          - type: LayoutBox
-                            style: list
-                            margin: none
-                            children:
-                              - type: LayoutBox
-                                style: inline
-                                margin: none
-                                children:
-                                  - type: TextBox
-                                    name: Dependence
-                                    margin: none
-                                    format: number
-                                  - type: TextBox
-                                    name: Outliers
-                                    margin: none
-                                    format: number
-                          - type: LayoutBox
-                            style: list
-                            margin: none
-                            children:
-                              - type: LayoutBox
-                                style: inline
-                                margin: none
-                                children:
-                                  - type: ComboBox
-                                    name: Cheating
-                                    margin: none
-                                  - type: TextBox
-                                    name: CheatingAttempts
-                                    margin: none
-                                    format: number
-      - type: LayoutBox
-        style: inline
-        margin: none
-        children:
-          - type: Label
-            label: ' '
-            verticalAlignment: center
-            margin: small
-            minWidth: 13
-          - type: CollapseBox
-            collapsed: true
-            label: Analysis
-            margin: none
-            minWidth: 200
-            children:
-            - type: LayoutBox
-              style: inline
-              children:
               - type: Label
                 label: ' '
                 verticalAlignment: center
                 margin: small
                 minWidth: 13
-              - type: LayoutBox
-                style: inline
+              - type: CollapseBox
+                collapsed: true
+                label: Analysis
                 margin: none
+                minWidth: 200
                 children:
-                  - type: ComboBox
-                    name: equalVar
-                  - type: ComboBox
-                    name: Transform
-            - type: LayoutBox
-              style: inline
-              children:
+                  - type: LayoutBox
+                    style: inline
+                    children:
+                      - type: Label
+                        label: ' '
+                        verticalAlignment: center
+                        margin: small
+                        minWidth: 13
+                      - type: LayoutBox
+                        style: inline
+                        margin: none
+                        children:
+                          - type: ComboBox
+                            name: equalVar
+                          - type: ComboBox
+                            name: Transform
+                  - type: LayoutBox
+                    style: inline
+                    children:
+                      - type: Label
+                        label: ' '
+                        verticalAlignment: center
+                        margin: small
+                        minWidth: 13
+                        children:
+                          - type: TextBox
+                            name: alphaSig
+                            format: number
+          - type: LayoutBox
+            style: inline
+            children:
               - type: Label
                 label: ' '
                 verticalAlignment: center
                 margin: small
                 minWidth: 13
-                children:
-                - type: TextBox
-                  name: alphaSig
-                  format: number
+              - type: Label
+                label: 'Presets:'
+              - type: ComboBox
+                name: presetHypothesis
+                events:
+                  change: './BrawSim.events::onChange_presetHypothesis'
+              - type: ComboBox
+                name: presetDesign
+                events:
+                  change: './BrawSim.events::onChange_presetDesign'
       - type: LayoutBox
         style: inline
         children:
-        - type: Label
-          label: ' '
-          verticalAlignment: center
-          margin: small
-          minWidth: 13
-        - type: Label
-          label: "Presets:"
-        - type: ComboBox
-          name: presetHypothesis
-          events:
-            change: './BrawSim.events::onChange_presetHypothesis'
-        - type: ComboBox
-          name: presetDesign
-          events:
-            change: './BrawSim.events::onChange_presetDesign'
-    - type: LayoutBox
-      style: inline
-      children:
-      - type: ActionButton
-        name: showHypothesisBtn
+          - type: ActionButton
+            name: showHypothesisBtn
   - type: Label
     label: Sample
     children:
@@ -576,10 +579,19 @@ children:
             children:
               - type: ComboBox
                 name: singleVar1
-                enable: '(showInferParam:Custom || showInferParam:2D)'
+                enable: >-
+                  (showSampleType:Infer && (showInferParam:Custom ||
+                  showInferParam:2D))
               - type: ComboBox
                 name: singleVar2
-                enable: '(showInferParam:Custom || showInferParam:2D)'
+                enable: >-
+                  (showSampleType:Infer && (showInferParam:Custom ||
+                  showInferParam:2D))
+              - type: ComboBox
+                name: showInferDimension
+                enable: >-
+                  (showSampleType:Infer && (showInferParam:Custom ||
+                  showInferParam:Basic))
       - type: LayoutBox
         style: inline
         margin: none
@@ -621,6 +633,9 @@ children:
                   - type: ComboBox
                     name: multipleVar2
                     enable: '(showMultipleParam:Custom || showMultipleParam:2D)'
+                  - type: ComboBox
+                    name: showMultipleDimension
+                    enable: '(showMultipleParam:Custom || showMultipleParam:Basic)'
       - type: LayoutBox
         style: inline
         margin: none
@@ -725,3 +740,8 @@ children:
             name: sendSample
           - type: Output
             name: sendMultiple
+  - type: LayoutBox
+    margin: large
+    children:
+      - type: ComboBox
+        name: showExploreDimension
