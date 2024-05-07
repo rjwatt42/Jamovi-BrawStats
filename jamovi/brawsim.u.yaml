@@ -517,49 +517,49 @@ children:
                     margin: none
                     minWidth: 200
                     children:
-                      - type: LayoutBox
-                        style: inline
-                        margin: none
-                        children:
-                          - type: Label
-                            label: ' '
-                            verticalAlignment: center
-                            margin: small
-                            minWidth: 13
-                          - type: CollapseBox
-                            label: MetaAnalysis
-                            collapsed: true
-                            margin: none
-                            children:
-                              - type: LayoutBox
-                                style: inline
-                                margin: none
-                                children:
-                                  - type: Label
-                                    label: ' '
-                                    verticalAlignment: center
-                                    margin: small
-                                    minWidth: 13
-                                  - name: MetaAnalysisOn
-                                    type: ComboBox
-                                  - name: MetaAnalysisType
-                                    type: ComboBox
-                                  - name: MetaAnalysisNulls
-                                    type: ComboBox
-                              - type: LayoutBox
-                                style: inline
-                                margin: none
-                                children:
-                                  - type: Label
-                                    label: ' '
-                                    verticalAlignment: center
-                                    margin: small
-                                    minWidth: 13
-                                  - type: TextBox
-                                    name: MetaAnalysisNStudies
-                                    format: number
-                                  - name: MetaAnalysisStudiesSig
-                                    type: ComboBox
+                      # - type: LayoutBox
+                      #   style: inline
+                      #   margin: none
+                      #   children:
+                      #     - type: Label
+                      #       label: ' '
+                      #       verticalAlignment: center
+                      #       margin: small
+                      #       minWidth: 13
+                      #     - type: CollapseBox
+                      #       label: MetaAnalysis
+                      #       collapsed: true
+                      #       margin: none
+                      #       children:
+                      #         - type: LayoutBox
+                      #           style: inline
+                      #           margin: none
+                      #           children:
+                      #             - type: Label
+                      #               label: ' '
+                      #               verticalAlignment: center
+                      #               margin: small
+                      #               minWidth: 13
+                      #             - name: MetaAnalysisOn
+                      #               type: ComboBox
+                      #             - name: MetaAnalysisType
+                      #               type: ComboBox
+                      #             - name: MetaAnalysisNulls
+                      #               type: ComboBox
+                      #         - type: LayoutBox
+                      #           style: inline
+                      #           margin: none
+                      #           children:
+                      #             - type: Label
+                      #               label: ' '
+                      #               verticalAlignment: center
+                      #               margin: small
+                      #               minWidth: 13
+                      #             - type: TextBox
+                      #               name: MetaAnalysisNStudies
+                      #               format: number
+                      #             - name: MetaAnalysisStudiesSig
+                      #               type: ComboBox
                       - type: LayoutBox
                         style: inline
                         children:

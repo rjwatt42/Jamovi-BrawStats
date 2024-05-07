@@ -25,7 +25,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       }
       statusStore<-braw.env$statusStore
       
-      # get some flags for later
+      # get some display parameters for later
       makeSampleNow<-self$options$makeSampleBtn
       showSampleType<-self$options$showSampleType
       showInferParam<-self$options$showInferParam
@@ -42,30 +42,6 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       showExploreDimension<-self$options$showExploreDimension
       whichShowExploreOut<-self$options$whichShowExplore
       
-      outputNow<-statusStore$lastOutput
-      outputNow1<-outputNow
-      if (self$options$showHypothesisBtn) outputNow<-"System"
-      outputNow2<-outputNow
-      
-      if (!is.null(braw.res$explore)) {
-        if (showExploreParam != statusStore$showExploreParam ||
-            showExploreDimension != statusStore$showExploreDimension)
-          outputNow<-"Explore"
-      }
-      if (!is.null(braw.res$expected)) {
-        if (showMultipleParam != statusStore$showMultipleParam ||
-            showMultipleDimension != statusStore$showMultipleDimension)
-          outputNow<-"Multiple"
-      }
-      if (!is.null(braw.res$result)) {
-        if (showInferParam != statusStore$showInferParam ||
-            showInferDimension != statusStore$showInferDimension)
-          outputNow<-"Infer"
-        if (showSampleType != statusStore$showSampleType)
-          outputNow<-showSampleType
-      }
-      outputNow3<-outputNow
-      
       if (showExploreParam=="Custom") {
         showExploreParam<-paste0(self$options$exploreVar1,";",self$options$exploreVar2)
       } 
@@ -76,10 +52,35 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         showInferParam<-paste0(self$options$singleVar1,";",self$options$singleVar2)
       } 
       
-      # make all the standard things we need
-      locals<-list(hypothesis=NULL,design=NULL,evidence=NULL,
-                   sample=NULL,analysis=NULL,explore=NULL)
+      # unless we have done something, we will make the same output as last time
+      outputNow<-statusStore$lastOutput
       
+      # we pressed the "show" hypothesis button
+      if (self$options$showHypothesisBtn) outputNow<-"System"
+
+      # are we asking for a different display of the current explore?
+      if (!is.null(braw.res$explore)) {
+        if (showExploreParam != statusStore$showExploreParam ||
+            showExploreDimension != statusStore$showExploreDimension)
+          outputNow<-"Explore"
+      }
+      # or expected?
+      if (!is.null(braw.res$expected)) {
+        if (showMultipleParam != statusStore$showMultipleParam ||
+            showMultipleDimension != statusStore$showMultipleDimension)
+          outputNow<-"Multiple"
+      }
+      # or result?
+      if (!is.null(braw.res$result)) {
+        if (showInferParam != statusStore$showInferParam ||
+            showInferDimension != statusStore$showInferDimension)
+          outputNow<-"Infer"
+        if (showSampleType != statusStore$showSampleType)
+          outputNow<-showSampleType
+      }
+      
+      # make all the standard things we need
+      # the hypothesis has IV, DV and effect
       DV<-makeVariable(self$options$DVname,self$options$DVtype,
                        mu=self$options$DVmu,sd=self$options$DVsd,skew=self$options$DVskew,kurtosis=self$options$DVkurt,
                        ncats=self$options$DVncats,proportions=self$options$DVprops,
@@ -115,6 +116,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       hypothesis<-makeHypothesis(IV,IV2,DV,effect)
       changedH<- !identical(oldH,hypothesis)
 
+      # set up the design variable
       oldD<-braw.def$design
       design<-makeDesign(sN=self$options$SampleSize,
                          sNRand=self$options$SampleSpread=="yes",sNRandK=self$options$SampleGamma,
@@ -135,6 +137,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                          )
       changedD<- !identical(oldD,design)
       
+      # set up the evidence variable
       oldE<-braw.def$evidence
       evidence<-makeEvidence(Welch=self$options$equalVar=="no",
                                     Transform=self$options$Transform
@@ -142,6 +145,7 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
       changedE<- !identical(oldE,evidence)
       braw.env$alphaSig<<-self$options$alphaSig
       
+      # set up the explore variable
       oldX<-braw.def$explore
       minV<-as.numeric(self$options$exploreMinVal)
       maxV<-as.numeric(self$options$exploreMaxVal)
@@ -151,20 +155,22 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                            xlog=self$options$exploreXLog)
       changedX<- !identical(oldX,explore)
       
-      oldM<-braw.def$metaAnalysis
-      metaAnalysis<-makeMetaAnalysis(nstudies=self$options$MetaAnalysisNStudies,
-                                 analysisType=self$options$MetaAnalysisType,
-                                 modelPDF="All",
-                                 sig_only=self$options$MetaAnalysisStudiesSig,
-                                 includeNulls=self$options$MetaAnalysisNulls)
-      changedM<- !identical(oldM,metaAnalysis)
+      # oldM<-braw.def$metaAnalysis
+      # metaAnalysis<-makeMetaAnalysis(nstudies=self$options$MetaAnalysisNStudies,
+      #                            analysisType=self$options$MetaAnalysisType,
+      #                            modelPDF="All",
+      #                            sig_only=self$options$MetaAnalysisStudiesSig,
+      #                            includeNulls=self$options$MetaAnalysisNulls)
+      # changedM<- !identical(oldM,metaAnalysis)
       
+      # store the option variables inside the braw package
       braw.def$hypothesis<<-hypothesis
       braw.def$design<<-design
       braw.def$evidence<<-evidence
       braw.def$explore<<-explore
-      braw.def$metaAnalysis<<-metaAnalysis
+      # braw.def$metaAnalysis<<-metaAnalysis
       
+      # are any of the existing stored results now invalid?
       if (changedH || changedD) {
         braw.res$result<<-NULL
         braw.res$expected<<-NULL
@@ -184,11 +190,12 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         braw.res$explore<<-NULL
         outputNow<-"System"
       }
-      if (changedM) {
-        braw.res$metaAnalysis<<-NULL
-        outputNow<-"System"
-      }
+      # if (changedM) {
+      #   braw.res$metaAnalysis<<-NULL
+      #   outputNow<-"System"
+      # }
       
+      # now we start doing things
       # did we ask for a new sample?
       newSample<-FALSE
       if (makeSampleNow) {
@@ -212,23 +219,22 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
         outputNow<-"Explore"
       }
       
-      # what are we showing?
+      # self$results$debug$setVisible(TRUE)
+      # self$results$debug$setContent(c(statusStore$showInferParam,showInferParam,outputNow1,outputNow2,outputNow3,outputNow))
+      
+      # save everything for the next round      
+      statusStore$showSampleType<-showSampleType
+      statusStore$showInferParam<-showInferParam
+      statusStore$showInferDimension<-showInferDimension
+      statusStore$showMultipleParam<-showMultipleParam
+      statusStore$showMultipleDimension<-showMultipleDimension
+      statusStore$showExploreParam<-showExploreParam
+      statusStore$showExploreDimension<-showExploreDimension
       statusStore$lastOutput<-outputNow
       
-      self$results$debug$setVisible(TRUE)
-      self$results$debug$setContent(c(statusStore$showInferParam,showInferParam,outputNow1,outputNow2,outputNow3,outputNow))
-      
-      # end of actions      
-      statusStore$showSampleType<-self$options$showSampleType
-      statusStore$showInferParam<-self$options$showInferParam
-      statusStore$showInferDimension<-self$options$showInferDimension
-      statusStore$showMultipleParam<-self$options$showMultipleParam
-      statusStore$showMultipleDimension<-self$options$showMultipleDimension
-      statusStore$showExploreParam<-self$options$showExploreParam
-      statusStore$showExploreDimension<-self$options$showExploreDimension
-      # save everything for the next round      
       braw.env$statusStore<<-statusStore
       
+      # what are we showing?
       # main results graphs/reports
       if (!is.null(outputNow))     
         switch(outputNow,
@@ -258,6 +264,8 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
                }
         )
       
+      # now we save any results to the Jamovi spreadsheet
+      # single result first
       if (!is.null(braw.res$result)) {
         if (is.null(IV2)) {
           newVariables<-data.frame(braw.res$result$dv,braw.res$result$iv,braw.res$result$dv+NA)
@@ -266,18 +274,17 @@ BrawSimClass <- if (requireNamespace('jmvcore', quietly=TRUE)) R6::R6Class(
           newVariables<-data.frame(braw.res$result$dv,braw.res$result$iv,braw.res$result$iv2)
           names(newVariables)<-c(DV$name,IV$name,IV2$name)
         }
-        nvars<-length(newVariables)
-        
-        keys<-1:nvars
+
+        keys<-1:length(newVariables)
         measureTypes<-sapply(newVariables,function(x) { if (is.character(x)) "Nominal" else "Continuous"})
         
         self$results$sendSample$set(keys=keys,titles=names(newVariables),
-                                    descriptions=rep("simulated",nvars),
+                                    descriptions=rep("simulated",length(newVariables)),
                                     measureTypes=measureTypes
         )
         self$results$sendSample$setValues(newVariables)
       }
-      
+      # then multiple result
       if (!is.null(braw.res$expected)) {
         q<-mergeExpected(braw.res$expected$result,braw.res$expected$nullresult)
           newMultiple<-data.frame(q$rIV,q$nval,q$pIV)
