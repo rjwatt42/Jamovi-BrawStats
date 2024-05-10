@@ -206,14 +206,14 @@ doSample<-function(hypothesis=braw.def$hypothesis,design=braw.def$design,autoSho
       id<-1:n
       if (is.null(braw.env$lastSample)) {
         useIV<-match(IV$name,variables$name)
-        iv<-importedData[[useIV+1]]    
+        iv<-braw.res$importedData[[useIV+1]]    
         
         useDV<-match(DV$name,variables$name)
-        dv<-importedData[[useDV+1]] 
+        dv<-braw.res$importedData[[useDV+1]] 
         
         if (!is.null(IV2)) {
           useIV2<-match(IV2$name,variables$name)
-          iv2<-importedData[[useIV2+1]]    
+          iv2<-braw.res$importedData[[useIV2+1]]    
         } else {
           iv2<-rep(0,length(iv))
         }
@@ -236,8 +236,10 @@ doSample<-function(hypothesis=braw.def$hypothesis,design=braw.def$design,autoSho
     } else {
       
     if (IV$process=="data" && DV$process=="data"){
-      useIV<-match(IV$name,variables$name)
-      useDV<-match(DV$name,variables$name)
+      variables<-braw.res$importedData$variables
+      importedData<-braw.res$importedData$data
+      useIV<-match(IV$name,variables[,"name"])
+      useDV<-match(DV$name,variables[,"name"])
 
       id<-importedData[[1]]
       iv<-importedData[[useIV+1]]    
@@ -248,7 +250,7 @@ doSample<-function(hypothesis=braw.def$hypothesis,design=braw.def$design,autoSho
       waste<-(is.na(iv) | is.na(dv))
 
       if (!is.null(IV2)) {
-        useIV2<-match(IV2$name,variables$name)
+        useIV2<-match(IV2$name,variables[,"name"])
         iv2<-importedData[[useIV2+1]]    
         waste<-waste | is.na(iv2)
       } else {
@@ -756,7 +758,7 @@ doSample<-function(hypothesis=braw.def$hypothesis,design=braw.def$design,autoSho
   
   sample<-list(participant=id, iv=iv,iv2=iv2, dv=dv,ivplot=xplot,iv2plot=x2plot,dvplot=yplot,
                sampleRho=sampleRho,samplePval=samplePval,effectRho=rho,nval=design$sN,
-               hypothesis=hypothesis, effect=effect, design=design)
+               hypothesis=hypothesis, design=design)
   if (autoShow) print(showSample(sample))
   sample
 }

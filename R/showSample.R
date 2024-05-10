@@ -33,6 +33,7 @@ plotSample<-function(IV,DV,effect,ivplot,dvplot,g=NULL) {
 #' @export
 showSample<-function(sample=braw.res$result){
   if (is.null(sample)) sample<-doResult(autoShow=FALSE)
+  
   IV<-sample$hypothesis$IV
   IV2<-sample$hypothesis$IV2
   DV<-sample$hypothesis$DV

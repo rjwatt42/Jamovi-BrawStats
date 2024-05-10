@@ -48,10 +48,12 @@ reportPlot<-function(outputText,nc,nr){
   rightlabels<-grepl("!j",outputText)
   outputText<-sub("!j","",outputText)
   
-  redlabels<-grepl("\r",outputText)
-  outputText<-sub("\r","",outputText)
+  redlabels<-grepl("!r",outputText)
+  outputText<-sub("!r","",outputText)
   greenlabels<-grepl("!g",outputText)
   outputText<-sub("!g","",outputText)
+  bluelabels<-grepl("!b",outputText)
+  outputText<-sub("!b","",outputText)
   
   xlargelabels<-grepl("!>>>",outputText)
   outputText<-sub("!>>>","",outputText)
@@ -79,11 +81,14 @@ reportPlot<-function(outputText,nc,nr){
     if (italiclabels[i]) fontface<-"italic" 
     if (boldlabels[i] && italiclabels[i]) fontface<-"bold.italic" 
     if (rightlabels[i]) hjust<- 1 else hjust<- 0
-    if (rightlabels[i]) 
+    if (rightlabels[i]) {
       x<-x+cellSize[i]-characterWidth
+    }
     fill<-bg
-    if (redlabels[i]) fill="red"
-    if (redlabels[i]) fill="green"
+    col<-"black"
+    if (bluelabels[i]) col="#0000DD"
+    if (greenlabels[i]) col="#00DD00"
+    if (redlabels[i]) col="#DD0000"
     sz<-1
     if (xlargelabels[i]) sz<-1.8 
     if (vlargelabels[i]) sz<-1.5 
@@ -92,10 +97,10 @@ reportPlot<-function(outputText,nc,nr){
     mathlabel<-grepl("['^']{1}",label) || grepl("['[']{1}",label)
     if (any(mathlabel)) parse<-TRUE
     pts<-data.frame(x=x,y=top+1-y)
-    g<-g+geom_label(data=pts,aes(x=x, y=y), label=label, 
+    g<-g+geom_label(data=pts,aes(x=x, y=y), label=label,fontface=fontface, 
                                          hjust=hjust, vjust=0, 
                                          size=font_size*sz, 
-                                         fill=fill,fontface=fontface,
+                                         col=col,fill=fill,
                                          parse=parse,
                                          label.size=NA,label.padding=unit(0,"lines"))
   }

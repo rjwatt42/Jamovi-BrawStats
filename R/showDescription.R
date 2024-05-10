@@ -323,7 +323,7 @@ plotCatDescription<-function(analysis,g) {
 #' showDescription(analysis=doAnalysis())
 #' @export
 showDescription<-function(analysis=braw.res$result) {
-  if (is.null(analysis)) analysis<-doResult(autoShow=FALSE)
+  if(is.null(analysis)) analysis<-doAnalysis(autoShow=FALSE)
   
   braw.env$plotArea<-c(0,0,1,1)
   g<-getAxisPrediction(analysis$hypothesis) 
@@ -341,5 +341,6 @@ showDescription<-function(analysis=braw.res$result) {
             "Categorical"=g<-plotCatInterDescription(analysis,g)
     )
   }
+  g<-g+plotTitle(bquote(bold(r[s] ~ "=" ~ .(round(analysis$rIV,3)))))
   g
 }
